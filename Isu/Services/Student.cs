@@ -2,14 +2,11 @@
 {
     public class Student
     {
-        public Student(CourseNumber courseNumber, Group group, string name)
+        public Student(Group group, string name)
         {
-            Course = courseNumber;
             MyGroup = group;
             Name = name;
         }
-
-        public CourseNumber Course { get; }
 
         public Group MyGroup { get; private set; }
 

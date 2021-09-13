@@ -11,24 +11,8 @@ namespace Isu.Services
 
         public Group AddGroup(string name)
         {
-            if (name.Length == 5 && name[0] == 'M' && int.TryParse(name[1].ToString(), out int temp) && temp == 3 && int.TryParse(name[2].ToString(), out int cNumber) && int.TryParse(name.Substring(3, 2), out _))
+            if (CourseNumber.TryParse(name, out CourseNumber courseNumber))
             {
-                CourseNumber courseNumber = null;
-                foreach (CourseNumber course in _courseNumbers)
-                {
-                    if (cNumber == course.Number)
-                    {
-                        courseNumber = course;
-                        break;
-                    }
-                }
-
-                if (courseNumber == null)
-                {
-                    courseNumber = new CourseNumber(cNumber);
-                    _courseNumbers.Add(courseNumber);
-                }
-
                 var group = new Group(courseNumber, name);
                 courseNumber.AddGroup(group);
                 _groups.Add(group);
@@ -45,12 +29,12 @@ namespace Isu.Services
             // The group must be in database, because we`ll add the student to this database
             if (!_groups.Contains(group))
             {
-                throw new IsuException("The group isn`t in the IsuService`s database!");
+                throw new GroupNotFoundIsuException("The group isn`t in the IsuService`s database!");
             }
 
             if (group.IsFreePlace())
             {
-                var student = new Student(group.Course, group, name);
+                var student = new Student(group, name);
                 group.Course.AddStudent(student);
                 _students.Add(student);
                 group.AddStudent(student);
@@ -68,10 +52,8 @@ namespace Isu.Services
             {
                 return _students[id];
             }
-            else
-            {
-                return null;
-            }
+
+            throw new IsuException("Id is invalid");
         }
 
         public Student FindStudent(string name)
@@ -99,7 +81,7 @@ namespace Isu.Services
         public List<Student> FindStudents(CourseNumber courseNumber)
         {
             if (!_courseNumbers.Contains(courseNumber))
-                throw new IsuException("The CourseNumber isn`t in the IsuService`s database!");
+                return null;
 
             return courseNumber.Students;
         }
@@ -120,7 +102,7 @@ namespace Isu.Services
         public List<Group> FindGroups(CourseNumber courseNumber)
         {
             if (!_courseNumbers.Contains(courseNumber))
-                throw new IsuException("The CourseNumber isn`t in the IsuService`s database!");
+                return null;
 
             return courseNumber.Groups;
         }
