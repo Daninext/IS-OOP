@@ -11,49 +11,34 @@ namespace Isu.Services
 
         public Group AddGroup(string name)
         {
-            if (CourseNumber.TryParse(name, out CourseNumber courseNumber))
-            {
-                var group = new Group(courseNumber, name);
-                courseNumber.AddGroup(group);
-                _groups.Add(group);
-                return group;
-            }
-            else
-            {
-                throw new IsuException("The name of group is invalid!");
-            }
+            var courseNumber = CourseNumber.Parse(name);
+            var group = new Group(courseNumber, name);
+            courseNumber.AddGroup(group);
+            _groups.Add(group);
+
+            return group;
         }
 
         public Student AddStudent(Group group, string name)
         {
             // The group must be in database, because we`ll add the student to this database
             if (!_groups.Contains(group))
-            {
                 throw new GroupNotFoundIsuException("The group isn`t in the IsuService`s database!");
-            }
 
-            if (group.IsFreePlace())
-            {
-                var student = new Student(group, name);
-                group.Course.AddStudent(student);
-                _students.Add(student);
-                group.AddStudent(student);
-                return student;
-            }
-            else
-            {
-                throw new IsuException("There is no more free place in the group!");
-            }
+            var student = new Student(group, name);
+            group.AddStudent(student);
+            group.Course.AddStudent(student);
+            _students.Add(student);
+
+            return student;
         }
 
         public Student GetStudent(int id)
         {
             if (id < _students.Count)
-            {
                 return _students[id];
-            }
 
-            throw new IsuException("Id is invalid");
+            throw new IncorrectIdIsuException("Id is invalid");
         }
 
         public Student FindStudent(string name)
@@ -61,9 +46,7 @@ namespace Isu.Services
             foreach (Student stud in _students)
             {
                 if (stud.Name == name)
-                {
                     return stud;
-                }
             }
 
             return null;
@@ -91,9 +74,7 @@ namespace Isu.Services
             foreach (Group group in _groups)
             {
                 if (group.Name == groupName)
-                {
                     return group;
-                }
             }
 
             return null;
@@ -110,9 +91,9 @@ namespace Isu.Services
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
             if (!_students.Contains(student))
-                throw new IsuException("The student isn`t in the IsuService`s database!");
+                throw new StudentNotFoundIsuException("The student isn`t in the IsuService`s database!");
             if (!newGroup.IsFreePlace())
-                throw new IsuException("There is no more free place in the new group!");
+                throw new GroupIsFullIsuException("There is no more free place in the new group!");
 
             student.ChangeGroup(newGroup);
         }

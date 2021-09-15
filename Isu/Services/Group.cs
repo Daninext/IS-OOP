@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Isu.Tools;
 
 namespace Isu.Services
 {
@@ -20,7 +21,10 @@ namespace Isu.Services
 
         public void AddStudent(Student student)
         {
-            Students.Add(student);
+            if (IsFreePlace())
+                Students.Add(student);
+            else
+                throw new GroupIsFullIsuException("There is no more free place in the group!");
         }
 
         public void RemoveStudent(Student student)
