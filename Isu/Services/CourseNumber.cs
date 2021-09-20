@@ -18,10 +18,10 @@ namespace Isu.Services
 
         public static CourseNumber Parse(string name)
         {
-            if (name.Length == 5 && name[0] == 'M' && int.TryParse(name[1].ToString(), out int temp) && temp == 3 && int.TryParse(name[2].ToString(), out int course) && int.TryParse(name.Substring(3, 2), out _))
-                return new CourseNumber(course);
-            else
+            if (name.Length != 5 || name[0] != 'M' || !int.TryParse(name[1].ToString(), out int temp) || temp != 3 || !int.TryParse(name[2].ToString(), out int course) || !int.TryParse(name.Substring(3, 2), out _))
                 throw new GroupNameIsInvalidIsuException("The name of group is invalid!");
+
+            return new CourseNumber(course);
         }
 
         public void AddGroup(Group group)

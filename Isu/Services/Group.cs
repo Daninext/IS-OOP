@@ -21,10 +21,10 @@ namespace Isu.Services
 
         public void AddStudent(Student student)
         {
-            if (IsFreePlace())
-                Students.Add(student);
-            else
+            if (!IsFreePlace())
                 throw new GroupIsFullIsuException("There is no more free place in the group!");
+
+            Students.Add(student);
         }
 
         public void RemoveStudent(Student student)

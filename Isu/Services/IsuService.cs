@@ -35,10 +35,10 @@ namespace Isu.Services
 
         public Student GetStudent(int id)
         {
-            if (id < _students.Count)
-                return _students[id];
+            if (id >= _students.Count)
+                throw new IncorrectIdIsuException("Id is invalid");
 
-            throw new IncorrectIdIsuException("Id is invalid");
+            return _students[id];
         }
 
         public Student FindStudent(string name)
@@ -55,10 +55,10 @@ namespace Isu.Services
         public List<Student> FindStudents(string groupName)
         {
             Group temp = FindGroup(groupName);
-            if (temp != null)
-                return temp.Students;
+            if (temp == null)
+                return null;
 
-            return null;
+            return temp.Students;
         }
 
         public List<Student> FindStudents(CourseNumber courseNumber)
