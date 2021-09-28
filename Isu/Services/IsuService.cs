@@ -52,7 +52,7 @@ namespace Isu.Services
             return null;
         }
 
-        public List<Student> FindStudents(string groupName)
+        public IReadOnlyList<Student> FindStudents(string groupName)
         {
             Group temp = FindGroup(groupName);
             if (temp == null)
@@ -61,7 +61,7 @@ namespace Isu.Services
             return temp.Students;
         }
 
-        public List<Student> FindStudents(CourseNumber courseNumber)
+        public IReadOnlyList<Student> FindStudents(CourseNumber courseNumber)
         {
             if (!_courseNumbers.Contains(courseNumber))
                 return null;
@@ -80,7 +80,7 @@ namespace Isu.Services
             return null;
         }
 
-        public List<Group> FindGroups(CourseNumber courseNumber)
+        public IReadOnlyList<Group> FindGroups(CourseNumber courseNumber)
         {
             if (!_courseNumbers.Contains(courseNumber))
                 return null;

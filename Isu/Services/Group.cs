@@ -7,6 +7,8 @@ namespace Isu.Services
     {
         private const int MAXCOUNTSTUDENTS = 25;
 
+        private List<Student> _students = new List<Student>();
+
         public Group(CourseNumber courseNumber, string name)
         {
             Course = courseNumber;
@@ -17,24 +19,24 @@ namespace Isu.Services
 
         public string Name { get; }
 
-        public List<Student> Students { get; } = new List<Student>();
+        public IReadOnlyList<Student> Students { get => _students; }
 
         public void AddStudent(Student student)
         {
             if (!IsFreePlace())
                 throw new GroupIsFullIsuException("There is no more free place in the group!");
 
-            Students.Add(student);
+            _students.Add(student);
         }
 
         public void RemoveStudent(Student student)
         {
-            Students.Remove(student);
+            _students.Remove(student);
         }
 
         public bool IsFreePlace()
         {
-            return !(Students.Count >= MAXCOUNTSTUDENTS);
+            return !(_students.Count >= MAXCOUNTSTUDENTS);
         }
     }
 }

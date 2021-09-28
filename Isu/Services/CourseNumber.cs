@@ -5,16 +5,19 @@ namespace Isu.Services
 {
     public class CourseNumber
     {
-        public CourseNumber(int number)
+        private List<Group> _groups = new List<Group>();
+        private List<Student> _students = new List<Student>();
+
+        private CourseNumber(int number)
         {
             Number = number;
         }
 
         public int Number { get; }
 
-        public List<Group> Groups { get; } = new List<Group>();
+        public IReadOnlyList<Group> Groups { get => _groups; }
 
-        public List<Student> Students { get; } = new List<Student>();
+        public IReadOnlyList<Student> Students { get => _students; }
 
         public static CourseNumber Parse(string name)
         {
@@ -26,12 +29,12 @@ namespace Isu.Services
 
         public void AddGroup(Group group)
         {
-            Groups.Add(group);
+            _groups.Add(group);
         }
 
         public void AddStudent(Student student)
         {
-            Students.Add(student);
+            _students.Add(student);
         }
     }
 }

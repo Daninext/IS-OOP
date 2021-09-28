@@ -1,6 +1,7 @@
 using Isu.Services;
 using Isu.Tools;
 using NUnit.Framework;
+using System.Linq;
 
 namespace Isu.Tests
 {
