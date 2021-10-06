@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Shops.Services;
 using Shops.Tools;
 using NUnit.Framework;
 
 namespace Shops.Tests
 {
-    class ShopTests
+    public class ShopTests
     {
         private IShopManager _shopManager;
 
