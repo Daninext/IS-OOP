@@ -2,7 +2,7 @@
 
 namespace Isu.Tools
 {
-    public class IncorrectIdIsuException : Exception
+    public class IncorrectIdIsuException : IsuException
     {
         public IncorrectIdIsuException()
         {

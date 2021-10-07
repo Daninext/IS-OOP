@@ -2,7 +2,7 @@
 
 namespace Isu.Tools
 {
-    public class StudentNotFoundIsuException : Exception
+    public class StudentNotFoundIsuException : IsuException
     {
         public StudentNotFoundIsuException()
         {
