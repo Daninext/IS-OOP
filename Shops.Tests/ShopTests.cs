@@ -26,13 +26,13 @@ namespace Shops.Tests
             shopIds.Add(_shopManager.RegShop("First", "street"));
             productIds.Add(_shopManager.RegProduct("Mouse"));
 
-            _shopManager.FindShop(shopIds[0]).GetDelivery(productIds[0], 7);
+            _shopManager.FindShop(shopIds[0]).RequestForProducts(productIds[0], 7);
 
             productIds.Add(_shopManager.RegProduct("Keyboard"));
-            _shopManager.FindShop(shopIds[0]).GetDelivery(productIds[1], 20);
+            _shopManager.FindShop(shopIds[0]).RequestForProducts(productIds[1], 20);
 
             shopIds.Add(_shopManager.RegShop("Second", "street"));
-            _shopManager.FindShop(shopIds[1]).GetDelivery(productIds[1], 35);
+            _shopManager.FindShop(shopIds[1]).RequestForProducts(productIds[1], 35);
 
             Assert.IsTrue(_shopManager.FindShop(shopIds[0]).FindProductCount(productIds[0]) != null);
             Assert.IsTrue(_shopManager.FindShop(shopIds[0]).FindProductCount(productIds[1]) != null);
@@ -49,7 +49,7 @@ namespace Shops.Tests
             shopIds.Add(_shopManager.RegShop("First", "street"));
             productIds.Add(_shopManager.RegProduct("Mouse"));
 
-            _shopManager.FindShop(shopIds[0]).GetDelivery(productIds[0], 7);
+            _shopManager.FindShop(shopIds[0]).RequestForProducts(productIds[0], 7);
             _shopManager.FindShop(shopIds[0]).SetPrice(productIds[0], 500);
 
             Assert.AreEqual(_shopManager.FindShop(shopIds[0]).FindProductPrice(productIds[0]), 500);
@@ -65,17 +65,17 @@ namespace Shops.Tests
             shopIds.Add(_shopManager.RegShop("First", "street"));
             productIds.Add(_shopManager.RegProduct("Mouse"));
 
-            _shopManager.FindShop(shopIds[0]).GetDelivery(productIds[0], 7);
+            _shopManager.FindShop(shopIds[0]).RequestForProducts(productIds[0], 7);
             _shopManager.FindShop(shopIds[0]).SetPrice(productIds[0], 500);
 
             productIds.Add(_shopManager.RegProduct("Keyboard"));
-            _shopManager.FindShop(shopIds[0]).GetDelivery(productIds[1], 20);
+            _shopManager.FindShop(shopIds[0]).RequestForProducts(productIds[1], 20);
             _shopManager.FindShop(shopIds[0]).SetPrice(productIds[1], 800);
 
             shopIds.Add(_shopManager.RegShop("Second", "street"));
-            _shopManager.FindShop(shopIds[1]).GetDelivery(productIds[0], 10);
+            _shopManager.FindShop(shopIds[1]).RequestForProducts(productIds[0], 10);
             _shopManager.FindShop(shopIds[1]).SetPrice(productIds[0], 300);
-            _shopManager.FindShop(shopIds[1]).GetDelivery(productIds[1], 35);
+            _shopManager.FindShop(shopIds[1]).RequestForProducts(productIds[1], 35);
             _shopManager.FindShop(shopIds[1]).SetPrice(productIds[1], 900);
 
             Assert.AreEqual(_shopManager.FindCheapShop(new (uint, uint)[] { (productIds[0], 5), (productIds[1], 15) }), _shopManager.FindShop(shopIds[0]));
@@ -98,11 +98,11 @@ namespace Shops.Tests
             shopIds.Add(_shopManager.RegShop("First", "street"));
             productIds.Add(_shopManager.RegProduct("Mouse"));
 
-            _shopManager.FindShop(shopIds[0]).GetDelivery(productIds[0], 7);
+            _shopManager.FindShop(shopIds[0]).RequestForProducts(productIds[0], 7);
             _shopManager.FindShop(shopIds[0]).SetPrice(productIds[0], 500);
 
             productIds.Add(_shopManager.RegProduct("Keyboard"));
-            _shopManager.FindShop(shopIds[0]).GetDelivery(productIds[1], 20);
+            _shopManager.FindShop(shopIds[0]).RequestForProducts(productIds[1], 20);
             _shopManager.FindShop(shopIds[0]).SetPrice(productIds[1], 800);
 
             _shopManager.FindShop(shopIds[0]).SellProduct(productIds[0], 1, customer);

@@ -17,7 +17,7 @@ namespace Shops.Services
 
         public uint RegShop(string name, string address)
         {
-            var newShop = new Shop(name, address, this);
+            var newShop = new Shop(name, address, Products);
             _shops.Add(_nextIdShop, newShop);
             _nextIdShop++;
             return _nextIdShop - 1;

@@ -6,35 +6,36 @@ namespace Shops.Services
 {
     public class Shop
     {
-        private ShopManager _shopManager;
+        private IReadOnlyDictionary<uint, Product> _regProducts;
 
-        private Dictionary<uint, (Product, uint, uint)> _products = new Dictionary<uint, (Product, uint, uint)>(); // Product, count, price
+        private Dictionary<uint, ProductInShop> _products = new Dictionary<uint, ProductInShop>();
 
-        public Shop(string name, string address, ShopManager shopManager)
+        public Shop(string name, string address, IReadOnlyDictionary<uint, Product> regProducts)
         {
             Name = name;
             Address = address;
-            _shopManager = shopManager;
+            _regProducts = regProducts;
         }
 
         public string Name { get; private set; }
 
         public string Address { get; private set; }
 
-        public IReadOnlyDictionary<uint, (Product, uint, uint)> Products { get => _products; }
+        public IReadOnlyDictionary<uint, ProductInShop> Products { get => _products; }
 
-        public void GetDelivery(uint idProduct, uint count)
+        public void RequestForProducts(uint idProduct, uint count)
         {
-            Product product = _shopManager.GetProduct(idProduct);
+            if (!_regProducts.ContainsKey(idProduct))
+                throw new ProductNotFoundShopException("Product isn`t in the database");
 
             if (!_products.ContainsKey(idProduct))
             {
-                _products.Add(idProduct, (product, count, 0));
+                _products.Add(idProduct, new ProductInShop(_regProducts[idProduct], count, 0));
                 SetPrice(idProduct, (uint)new Random().Next(1, 100));
             }
             else
             {
-                _products[idProduct] = (_products[idProduct].Item1, _products[idProduct].Item2 + count, _products[idProduct].Item3);
+                _products[idProduct].ChangeCount((int)count);
             }
         }
 
@@ -50,10 +51,10 @@ namespace Shops.Services
             {
                 if (!_products.ContainsKey(productIdCount[i].Item1))
                     throw new ProductNotFoundShopException("Product isn`t in the shop`s database");
-                if (_products[productIdCount[i].Item1].Item2 < productIdCount[i].Item2)
+                if (_products[productIdCount[i].Item1].Count < productIdCount[i].Item2)
                     throw new NotEnoughProductCountShopException("There are not so many products in the shop");
 
-                price += _products[productIdCount[i].Item1].Item3 * productIdCount[i].Item2;
+                price += _products[productIdCount[i].Item1].Price * productIdCount[i].Item2;
             }
 
             if (!customer.IsEnoughMoney(price))
@@ -61,7 +62,7 @@ namespace Shops.Services
 
             customer.SpendMoney((int)price);
             for (int i = 0; i != productIdCount.Length; ++i)
-                _products[productIdCount[i].Item1] = (_products[productIdCount[i].Item1].Item1, _products[productIdCount[i].Item1].Item2 - productIdCount[i].Item2, _products[productIdCount[i].Item1].Item3);
+                _products[productIdCount[i].Item1].ChangeCount(-(int)productIdCount[i].Item2);
         }
 
         public void SetPrice(uint idProduct, uint newPrice)
@@ -69,7 +70,7 @@ namespace Shops.Services
             if (!_products.ContainsKey(idProduct))
                 throw new ProductNotFoundShopException("Product isn`t in the shop`s database");
 
-            _products[idProduct] = (_products[idProduct].Item1, _products[idProduct].Item2, newPrice);
+            _products[idProduct].ChangePrice(newPrice);
         }
 
         public uint? FindProductPrice(uint idProduct)
@@ -77,7 +78,7 @@ namespace Shops.Services
             if (!_products.ContainsKey(idProduct))
                 return null;
 
-            return _products[idProduct].Item3;
+            return _products[idProduct].Price;
         }
 
         public uint? FindProductCount(uint idProduct)
@@ -85,7 +86,7 @@ namespace Shops.Services
             if (!_products.ContainsKey(idProduct))
                 return null;
 
-            return _products[idProduct].Item2;
+            return _products[idProduct].Count;
         }
     }
 }
