@@ -29,18 +29,14 @@ namespace Shops.Services
         public void SellManyProducts(RequestableProduct[] reqProducts, Customer customer)
         {
             int price = 0;
-            for (int i = 0; i != reqProducts.Length; ++i)
+            foreach (RequestableProduct product in reqProducts)
             {
-                if (reqProducts[i].ID < 0)
-                    throw new InvalidIdShopException("There is a invalid ID");
-                if (reqProducts[i].Count < 0)
-                    throw new InvalidCountShopException("There is a invalid count");
-                if (!_products.ContainsKey(reqProducts[i].ID))
+                if (!_products.ContainsKey(product.ID))
                     throw new ProductNotFoundShopException("Product isn`t in the shop`s database");
-                if (_products[reqProducts[i].ID].Count < reqProducts[i].Count)
+                if (_products[product.ID].Count < product.Count)
                     throw new NotEnoughProductCountShopException("There are not so many products in the shop");
 
-                price += _products[reqProducts[i].ID].Price * reqProducts[i].Count;
+                price += _products[product.ID].Price * product.Count;
             }
 
             customer.SpendMoney(price);

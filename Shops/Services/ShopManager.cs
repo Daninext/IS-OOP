@@ -69,9 +69,9 @@ namespace Shops.Services
             foreach (KeyValuePair<int, Shop> idShop in _shops)
             {
                 bool isProductInShop = true;
-                for (int i = 0; i != reqProducts.Length; ++i)
+                foreach (RequestableProduct product in reqProducts)
                 {
-                    if (idShop.Value.FindProductCount(reqProducts[i].ID) == null || idShop.Value.FindProductCount(reqProducts[i].ID) < reqProducts[i].Count)
+                    if (idShop.Value.FindProductCount(product.ID) == null || idShop.Value.FindProductCount(product.ID) < product.Count)
                     {
                         isProductInShop = false;
                         break;
@@ -81,11 +81,9 @@ namespace Shops.Services
                 if (!isProductInShop)
                     continue;
 
-                int curPrice = 0;
-                for (int i = 0; i != reqProducts.Length; ++i)
-                {
-                    curPrice += (int)idShop.Value.FindProductPrice(reqProducts[i].ID) * reqProducts[i].Count;
-                }
+                int? curPrice = 0;
+                foreach (RequestableProduct product in reqProducts)
+                    curPrice += idShop.Value.FindProductPrice(product.ID) * product.Count;
 
                 if (minPrice == null || minPrice > curPrice)
                 {
