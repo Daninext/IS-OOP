@@ -1,71 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Shops.Tools;
 
+[assembly: InternalsVisibleTo("ShopManager")]
 namespace Shops.Services
 {
     public class Shop
     {
-        private IReadOnlyDictionary<uint, Product> _regProducts;
+        private Dictionary<int, ProductInShop> _products = new Dictionary<int, ProductInShop>();
 
-        private Dictionary<uint, ProductInShop> _products = new Dictionary<uint, ProductInShop>();
-
-        public Shop(string name, string address, IReadOnlyDictionary<uint, Product> regProducts)
+        public Shop(string name, string address)
         {
             Name = name;
             Address = address;
-            _regProducts = regProducts;
         }
 
         public string Name { get; private set; }
 
         public string Address { get; private set; }
 
-        public IReadOnlyDictionary<uint, ProductInShop> Products { get => _products; }
+        public IReadOnlyDictionary<int, ProductInShop> Products { get => _products; }
 
-        public void RequestForProducts(uint idProduct, uint count)
+        public void SellProduct(int idProduct, int count, Customer customer)
         {
-            if (!_regProducts.ContainsKey(idProduct))
-                throw new ProductNotFoundShopException("Product isn`t in the database");
-
-            if (!_products.ContainsKey(idProduct))
-            {
-                _products.Add(idProduct, new ProductInShop(_regProducts[idProduct], count, 0));
-                SetPrice(idProduct, (uint)new Random().Next(1, 100));
-            }
-            else
-            {
-                _products[idProduct].ChangeCount((int)count);
-            }
+            SellManyProducts(new[] { new RequestableProduct(idProduct, count) }, customer);
         }
 
-        public void SellProduct(uint idProduct, uint count, Customer customer)
+        public void SellManyProducts(RequestableProduct[] reqProducts, Customer customer)
         {
-            SellManyProducts(new[] { (idProduct, count) }, customer);
-        }
-
-        public void SellManyProducts((uint, uint)[] productIdCount, Customer customer)
-        {
-            uint price = 0;
-            for (int i = 0; i != productIdCount.Length; ++i)
+            int price = 0;
+            for (int i = 0; i != reqProducts.Length; ++i)
             {
-                if (!_products.ContainsKey(productIdCount[i].Item1))
+                if (reqProducts[i].ID < 0)
+                    throw new InvalidIdShopException("There is a invalid ID");
+                if (reqProducts[i].Count < 0)
+                    throw new InvalidCountShopException("There is a invalid count");
+                if (!_products.ContainsKey(reqProducts[i].ID))
                     throw new ProductNotFoundShopException("Product isn`t in the shop`s database");
-                if (_products[productIdCount[i].Item1].Count < productIdCount[i].Item2)
+                if (_products[reqProducts[i].ID].Count < reqProducts[i].Count)
                     throw new NotEnoughProductCountShopException("There are not so many products in the shop");
 
-                price += _products[productIdCount[i].Item1].Price * productIdCount[i].Item2;
+                price += _products[reqProducts[i].ID].Price * reqProducts[i].Count;
             }
 
-            if (!customer.IsEnoughMoney(price))
-                throw new NotEnoughMoneyShopException("Customer haven`t money");
-
-            customer.SpendMoney((int)price);
-            for (int i = 0; i != productIdCount.Length; ++i)
-                _products[productIdCount[i].Item1].ChangeCount(-(int)productIdCount[i].Item2);
+            customer.SpendMoney(price);
+            for (int i = 0; i != reqProducts.Length; ++i)
+                _products[reqProducts[i].ID].ChangeCount(-reqProducts[i].Count);
         }
 
-        public void SetPrice(uint idProduct, uint newPrice)
+        public void SetPrice(int idProduct, int newPrice)
         {
             if (!_products.ContainsKey(idProduct))
                 throw new ProductNotFoundShopException("Product isn`t in the shop`s database");
@@ -73,7 +56,7 @@ namespace Shops.Services
             _products[idProduct].ChangePrice(newPrice);
         }
 
-        public uint? FindProductPrice(uint idProduct)
+        public int? FindProductPrice(int idProduct)
         {
             if (!_products.ContainsKey(idProduct))
                 return null;
@@ -81,12 +64,24 @@ namespace Shops.Services
             return _products[idProduct].Price;
         }
 
-        public uint? FindProductCount(uint idProduct)
+        public int? FindProductCount(int idProduct)
         {
             if (!_products.ContainsKey(idProduct))
                 return null;
 
             return _products[idProduct].Count;
+        }
+
+        internal void RequestForProducts(Product product, int idProduct, int count, int price)
+        {
+            if (!_products.ContainsKey(idProduct))
+            {
+                _products.Add(idProduct, new ProductInShop(product, count, price));
+            }
+            else
+            {
+                _products[idProduct].ChangeCount(count);
+            }
         }
     }
 }

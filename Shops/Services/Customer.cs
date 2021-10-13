@@ -17,14 +17,14 @@ namespace Shops.Services
 
         public int Money { get => _money; }
 
-        public bool IsEnoughMoney(uint needMoney)
+        public bool IsEnoughMoney(int needMoney)
         {
             return needMoney <= _money;
         }
 
         public void SpendMoney(int needMoney)
         {
-            if (!IsEnoughMoney((uint)needMoney))
+            if (!IsEnoughMoney(needMoney))
                 throw new NotEnoughMoneyShopException("Customer haven`t money");
 
             _money -= needMoney;

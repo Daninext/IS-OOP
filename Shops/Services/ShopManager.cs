@@ -5,25 +5,25 @@ namespace Shops.Services
 {
     public class ShopManager : IShopManager
     {
-        private uint _nextIdShop = 1;
-        private uint _nextIdProduct = 1;
+        private int _nextIdShop = 1;
+        private int _nextIdProduct = 1;
 
-        private Dictionary<uint, Shop> _shops = new Dictionary<uint, Shop>();
-        private Dictionary<uint, Product> _products = new Dictionary<uint, Product>();
+        private Dictionary<int, Shop> _shops = new Dictionary<int, Shop>();
+        private Dictionary<int, Product> _products = new Dictionary<int, Product>();
 
-        public IReadOnlyDictionary<uint, Shop> Shops { get => _shops; }
+        public IReadOnlyDictionary<int, Shop> Shops { get => _shops; }
 
-        public IReadOnlyDictionary<uint, Product> Products { get => _products; }
+        public IReadOnlyDictionary<int, Product> Products { get => _products; }
 
-        public uint RegShop(string name, string address)
+        public int RegShop(string name, string address)
         {
-            var newShop = new Shop(name, address, Products);
+            var newShop = new Shop(name, address);
             _shops.Add(_nextIdShop, newShop);
             _nextIdShop++;
             return _nextIdShop - 1;
         }
 
-        public Shop FindShop(uint id)
+        public Shop FindShop(int id)
         {
             if (!_shops.ContainsKey(id))
                 return null;
@@ -31,7 +31,7 @@ namespace Shops.Services
             return _shops[id];
         }
 
-        public uint RegProduct(string name)
+        public int RegProduct(string name)
         {
             var newProduct = new Product(name);
             _products.Add(_nextIdProduct, newProduct);
@@ -39,7 +39,7 @@ namespace Shops.Services
             return _nextIdProduct - 1;
         }
 
-        public Product GetProduct(uint id)
+        public Product GetProduct(int id)
         {
             if (!_products.ContainsKey(id))
                 throw new ProductNotFoundShopException("Product isn`t in the database");
@@ -47,32 +47,44 @@ namespace Shops.Services
             return _products[id];
         }
 
-        public Shop FindCheapShop((uint, uint)[] productIdCount)
+        public void GlobalRequestForProducts(Shop shop, int idProduct, int count, int price = 0)
         {
-            for (int i = 0; i != productIdCount.Length; ++i)
-                GetProduct(productIdCount[i].Item1);
+            if (idProduct < 0)
+                throw new InvalidIdShopException("There is a invalid ID");
+            if (count < 0)
+                throw new InvalidCountShopException("There is a invalid count");
+            if (price < 0)
+                throw new InvalidPriceShopException("There is a invalid price");
+
+            shop.RequestForProducts(GetProduct(idProduct), idProduct, count, price);
+        }
+
+        public Shop FindCheapShop(RequestableProduct[] reqProducts)
+        {
+            for (int i = 0; i != reqProducts.Length; ++i)
+                GetProduct(reqProducts[i].ID);
 
             int? minPrice = null;
             Shop cheapShop = null;
-            foreach (KeyValuePair<uint, Shop> idShop in _shops)
+            foreach (KeyValuePair<int, Shop> idShop in _shops)
             {
-                bool flag = false;
-                for (int i = 0; i != productIdCount.Length; ++i)
+                bool isProductInShop = true;
+                for (int i = 0; i != reqProducts.Length; ++i)
                 {
-                    if (idShop.Value.FindProductCount(productIdCount[i].Item1) == null || idShop.Value.FindProductCount(productIdCount[i].Item1) < productIdCount[i].Item2)
+                    if (idShop.Value.FindProductCount(reqProducts[i].ID) == null || idShop.Value.FindProductCount(reqProducts[i].ID) < reqProducts[i].Count)
                     {
-                        flag = true;
+                        isProductInShop = false;
                         break;
                     }
                 }
 
-                if (flag)
+                if (!isProductInShop)
                     continue;
 
                 int curPrice = 0;
-                for (int i = 0; i != productIdCount.Length; ++i)
+                for (int i = 0; i != reqProducts.Length; ++i)
                 {
-                    curPrice += (int)idShop.Value.FindProductPrice(productIdCount[i].Item1) * (int)productIdCount[i].Item2;
+                    curPrice += (int)idShop.Value.FindProductPrice(reqProducts[i].ID) * reqProducts[i].Count;
                 }
 
                 if (minPrice == null || minPrice > curPrice)
