@@ -4,16 +4,15 @@ namespace Shops.Services
 {
     public class Customer
     {
-        private string _name;
         private int _money;
 
         public Customer(string name, int money)
         {
-            _name = name;
+            Name = name;
             _money = money;
         }
 
-        public string Name { get => _name; }
+        public string Name { get; private set; }
 
         public int Money { get => _money; }
 

@@ -61,8 +61,8 @@ namespace Shops.Services
 
         public Shop FindCheapShop(RequestableProduct[] reqProducts)
         {
-            for (int i = 0; i != reqProducts.Length; ++i)
-                GetProduct(reqProducts[i].ID);
+            foreach (RequestableProduct product in reqProducts)
+                GetProduct(product.ID);
 
             int? minPrice = null;
             Shop cheapShop = null;

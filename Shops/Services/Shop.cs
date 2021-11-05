@@ -40,8 +40,8 @@ namespace Shops.Services
             }
 
             customer.SpendMoney(price);
-            for (int i = 0; i != reqProducts.Length; ++i)
-                _products[reqProducts[i].ID].ChangeCount(-reqProducts[i].Count);
+            foreach (RequestableProduct product in reqProducts)
+                _products[product.ID].ChangeCount(-product.Count);
         }
 
         public void SetPrice(int idProduct, int newPrice)

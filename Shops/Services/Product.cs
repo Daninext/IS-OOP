@@ -2,13 +2,11 @@
 {
     public class Product
     {
-        private string _name;
-
         public Product(string name)
         {
-            _name = name;
+            Name = name;
         }
 
-        public string Name { get => _name; }
+        public string Name { get; private set; }
     }
 }
