@@ -4,7 +4,6 @@ namespace Shops.Services
 {
     public class Customer
     {
-
         public Customer(string name, int money)
         {
             Name = name;
