@@ -4,21 +4,20 @@ namespace Shops.Services
 {
     public class Customer
     {
-        private int _money;
 
         public Customer(string name, int money)
         {
             Name = name;
-            _money = money;
+            Money = money;
         }
 
         public string Name { get; private set; }
 
-        public int Money { get => _money; }
+        public int Money { get; private set; }
 
         public bool IsEnoughMoney(int needMoney)
         {
-            return needMoney <= _money;
+            return needMoney <= Money;
         }
 
         public void SpendMoney(int needMoney)
@@ -26,7 +25,7 @@ namespace Shops.Services
             if (!IsEnoughMoney(needMoney))
                 throw new NotEnoughMoneyShopException("Customer haven`t money");
 
-            _money -= needMoney;
+            Money -= needMoney;
         }
     }
 }
