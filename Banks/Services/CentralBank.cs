@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Banks.Tools;
 
 namespace Banks.Services
@@ -8,7 +9,7 @@ namespace Banks.Services
         private List<Bank> _banks = new List<Bank>();
         private List<AccountTransaction> _transactions = new List<AccountTransaction>();
 
-        private delegate void CapEvent(int days);
+        private delegate void CapEvent(DateTime target);
 
         private event CapEvent Capital;
 
@@ -36,20 +37,20 @@ namespace Banks.Services
             return null;
         }
 
-        public void CapTime(int days)
+        public void CapTime(DateTime target)
         {
-            Capital?.Invoke(days);
+            Capital?.Invoke(target);
         }
 
         public void TransactionMoney(IAccount outAc, IAccount toAc, long money)
         {
             outAc.Transaction(money, toAc);
-            MakeHistory(outAc, toAc, money, "transfer");
+            MakeHistory(outAc, toAc, money, new TransferType());
         }
 
-        public void MakeHistory(IAccount outAc, IAccount toAc, long money, string type)
+        public void MakeHistory(IAccount outAc, IAccount toAc, long money, ITransaction transaction)
         {
-            _transactions.Add(new AccountTransaction(type, outAc, toAc, money));
+            _transactions.Add(new AccountTransaction(transaction, outAc, toAc, money));
         }
 
         public void CancelLastTransaction(IAccount account)
@@ -58,30 +59,7 @@ namespace Banks.Services
             {
                 if (_transactions[i].OutAccount == account || _transactions[i].ToAccount == account)
                 {
-                    switch (_transactions[i].TransactionType)
-                    {
-                        case "transfer":
-                            if (_transactions[i].OutAccount == account)
-                            {
-                                account.DepositMoney(_transactions[i].Money);
-                                _transactions[i].ToAccount.WithdrawMoney(_transactions[i].Money);
-                            }
-                            else
-                            {
-                                account.WithdrawMoney(_transactions[i].Money);
-                                _transactions[i].ToAccount.DepositMoney(_transactions[i].Money);
-                            }
-
-                            break;
-
-                        case "withdraw":
-                            account.DepositMoney(_transactions[i].Money);
-                            break;
-
-                        case "deposit":
-                            account.WithdrawMoney(_transactions[i].Money);
-                            break;
-                    }
+                    _transactions[i].Transaction.CancelTransaction(_transactions[i].OutAccount, _transactions[i].ToAccount, _transactions[i].Money);
 
                     _transactions.RemoveAt(i);
                     break;

@@ -45,7 +45,7 @@ namespace Banks.Services
         {
             if (money < 0)
                 throw new InvalidMoneyCountBanksException("Invalid money count");
-            if (_handler.Form.Status == "Unconfirmed" && money > _handler.MBank.WithdrawLimit)
+            if (!_handler.FormBuilder.Form.IsConfirmed() && money > _handler.MBank.WithdrawLimit)
                 throw new OutOfLimitBanksException("Out of withdraw limit");
 
             Money -= money;
@@ -53,7 +53,7 @@ namespace Banks.Services
 
         public void Transaction(long money, IAccount account)
         {
-            if (_handler.Form.Status == "Onconfirmed" && money > _handler.MBank.TransferLimit)
+            if (!_handler.FormBuilder.Form.IsConfirmed() && money > _handler.MBank.TransferLimit)
                 throw new OutOfLimitBanksException("Out of transfer limit");
 
             WithdrawMoney(money);

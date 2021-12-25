@@ -2,9 +2,9 @@
 {
     public class AccountTransaction
     {
-        public AccountTransaction(string transactionType, IAccount outAccount, IAccount toAccount, long money)
+        public AccountTransaction(ITransaction transaction, IAccount outAccount, IAccount toAccount, long money)
         {
-            TransactionType = transactionType;
+            Transaction = transaction;
 
             OutAccount = outAccount;
             ToAccount = toAccount;
@@ -12,7 +12,7 @@
             Money = money;
         }
 
-        public string TransactionType { get; }
+        public ITransaction Transaction { get; }
 
         public IAccount OutAccount { get; }
         public IAccount ToAccount { get; }

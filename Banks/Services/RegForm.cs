@@ -4,40 +4,64 @@ namespace Banks.Services
 {
     public class RegForm
     {
-        public RegForm(string fname, string sname, string passportNum, string tel = "", string address = "")
+        private string _fname;
+        private string _sname;
+        private string _passportNum;
+
+        public RegForm(string fname, string sname, string passportNum)
         {
-            foreach (char c in fname)
-            {
-                if (!char.IsLetter(c))
-                    throw new InvalidRegDataBanksException("Invalid first name");
-            }
-
-            foreach (char c in sname)
-            {
-                if (!char.IsLetter(c))
-                    throw new InvalidRegDataBanksException("Invalid second name");
-            }
-
-            foreach (char c in passportNum)
-            {
-                if (!char.IsDigit(c))
-                    throw new InvalidRegDataBanksException("Invalid passport number");
-            }
-
             FName = fname;
             SName = sname;
             PassportNum = passportNum;
-
-            ChangeTelephone(tel);
-            ChangeAddress(address);
         }
 
-        public string FName { get; private set; }
-        public string SName { get; private set; }
-        public string PassportNum { get; private set; }
-        public string Telephone { get; private set; }
-        public string Address { get; private set; }
-        public string Status { get; private set; }
+        public string FName
+        {
+            get => _fname;
+            private set
+            {
+                foreach (char c in value)
+                {
+                    if (!char.IsLetter(c))
+                        throw new InvalidRegDataBanksException("Invalid first name");
+                }
+
+                _fname = value;
+            }
+        }
+
+        public string SName
+        {
+            get => _sname;
+            private set
+            {
+                foreach (char c in value)
+                {
+                    if (!char.IsLetter(c))
+                        throw new InvalidRegDataBanksException("Invalid second name");
+                }
+
+                _sname = value;
+            }
+        }
+
+        public string PassportNum
+        {
+            get => _passportNum;
+            private set
+            {
+                foreach (char c in value)
+                {
+                    if (!char.IsDigit(c))
+                        throw new InvalidRegDataBanksException("Invalid passport number");
+                }
+
+                _passportNum = value;
+            }
+        }
+
+        public string Telephone { get; private set; } = string.Empty;
+        public string Address { get; private set; } = string.Empty;
 
         public void ChangeTelephone(string tel)
         {
@@ -51,27 +75,19 @@ namespace Banks.Services
             }
 
             Telephone = tel;
-
-            ChangeStatus();
         }
 
         public void ChangeAddress(string address)
         {
             Address = address;
-
-            ChangeStatus();
         }
 
-        private void ChangeStatus()
+        public bool IsConfirmed()
         {
             if (Telephone != string.Empty && Address != string.Empty)
-            {
-                Status = "Confirmed";
-            }
-            else
-            {
-                Status = "Unconfirmed";
-            }
+                return true;
+
+            return false;
         }
     }
 }

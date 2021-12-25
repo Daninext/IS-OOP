@@ -76,9 +76,9 @@ namespace Banks.Services
         public long WithdrawLimit { get; private set; } = 8000;
         public long TransferLimit { get; private set; } = 5000;
 
-        public Client RegClient(RegForm form)
+        public Client RegClient(RegFormBuilder form)
         {
-            if (FindClient(form.PassportNum) != null)
+            if (FindClient(form.Form.PassportNum) != null)
                 throw new SameClientBanksException("There is same client");
 
             var client = new Client(form, this);
@@ -90,7 +90,7 @@ namespace Banks.Services
         {
             foreach (Client client in _clients)
             {
-                if (client.Form.PassportNum == passportNum)
+                if (client.FormBuilder.Form.PassportNum == passportNum)
                     return client;
             }
 
@@ -126,11 +126,11 @@ namespace Banks.Services
             client.CreateDepositAc(endAcTime, _depositPercentages, startMoney);
         }
 
-        public void Capitalize(int daysAgo)
+        public void Capitalize(DateTime targetDate)
         {
-            for (int i = 0; i != daysAgo; ++i)
+            while (_date.Date != targetDate.Date)
             {
-                _date.AddDays(1);
+                _date = _date.AddDays(1);
 
                 if (_date.Day == 1)
                 {
@@ -176,13 +176,13 @@ namespace Banks.Services
         public void Withdraw(IAccount account, long money)
         {
             account.WithdrawMoney(money);
-            _centralBank.MakeHistory(account, null, money, "withdraw");
+            _centralBank.MakeHistory(account, null, money, new WithdrawType());
         }
 
         public void Deposit(IAccount account, long money)
         {
             account.DepositMoney(money);
-            _centralBank.MakeHistory(account, null, money, "deposit");
+            _centralBank.MakeHistory(account, null, money, new DepositType());
         }
 
         public void ChangeWithdrawLimit(long newLimit)

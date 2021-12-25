@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Globalization;
 using Banks.Tools;
 
 namespace Banks.Services
 {
     public class Client
     {
-        public Client(RegForm form, Bank bank)
+        public Client(RegFormBuilder form, Bank bank)
         {
-            Form = form;
+            FormBuilder = form;
             MBank = bank;
         }
 
-        public RegForm Form { get; private set; }
+        public RegFormBuilder FormBuilder { get; private set; }
 
         public Debit DebitAc { get; private set; } = null;
         public Credit CreditAc { get; private set; } = null;
@@ -68,7 +69,7 @@ namespace Banks.Services
             if (DebitAc == null)
                 throw new AccountNotExistsBanksException("Client hasn`t debit account");
 
-            return (long)(DebitAc.Money * (DebitAc.Percentages / (365 * 100)));
+            return (long)(DebitAc.Money * (DebitAc.Percentages / (new GregorianCalendar().GetDaysInYear(DateTime.Now.Year) * 100)));
         }
 
         public long ExtraDepositMoney()
@@ -76,7 +77,7 @@ namespace Banks.Services
             if (DepositAc == null)
                 throw new AccountNotExistsBanksException("Client hasn`t credit account");
 
-            return (long)(DepositAc.Money * (DepositAc.Percentages.GetPercent(DepositAc.Money) / (365 * 100)));
+            return (long)(DepositAc.Money * (DepositAc.Percentages.GetPercent(DepositAc.Money) / (new GregorianCalendar().GetDaysInYear(DateTime.Now.Year) * 100)));
         }
 
         public long ExtraCreditMoney()
@@ -87,7 +88,7 @@ namespace Banks.Services
             if (CreditAc.Money > 0)
                 return 0;
 
-            return (long)(CreditAc.Money * (CreditAc.Fee / (365 * 100)));
+            return (long)(CreditAc.Money * (CreditAc.Fee / (new GregorianCalendar().GetDaysInYear(DateTime.Now.Year) * 100)));
         }
     }
 }

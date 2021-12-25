@@ -27,7 +27,8 @@ namespace Banks.Tests
                 _centralBank = new CentralBank();
 
                 Bank bank = _centralBank.RegBank("Sberbank");
-                Client client = bank.RegClient(new RegForm("Daniil", "Arsentev", "123456", "+123232", "Hell"));
+                Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
+                client.FormBuilder.AddAdress("Hell");
 
                 Assert.AreEqual(bank, _centralBank.FindBank("Sberbank"));
                 Assert.AreEqual(client, bank.FindClient("123456"));
@@ -39,12 +40,12 @@ namespace Banks.Tests
                 _centralBank = new CentralBank();
 
                 Bank bank = _centralBank.RegBank("Sberbank");
-                Client client = bank.RegClient(new RegForm("Daniil", "Arsentev", "123456", "+123232", "Hell"));
+                Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
 
                 bank.CreateDebitAc(client, 100000);
                 bank.ChangeDebitPers(3.65f);
 
-                _centralBank.CapTime(365);
+                _centralBank.CapTime(DateTime.Now.AddYears(1));
 
                 Assert.AreEqual(103650, client.DebitAc.Money);
             }
@@ -55,11 +56,11 @@ namespace Banks.Tests
                 _centralBank = new CentralBank();
 
                 Bank bank = _centralBank.RegBank("Sberbank");
-                Client client = bank.RegClient(new RegForm("Daniil", "Arsentev", "123456", "+123232", "Hell"));
+                Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
 
                 bank.CreateDebitAc(client, 100000);
 
-                Client client2 = bank.RegClient(new RegForm("Artem", "Tutov", "122563", "+1232232", "Hell 2"));
+                Client client2 = bank.RegClient(new RegFormBuilder("Artem", "Tutov", "122563"));
 
                 bank.CreateDebitAc(client2, 1000);
 
@@ -76,13 +77,15 @@ namespace Banks.Tests
                 _centralBank = new CentralBank();
 
                 Bank bank = _centralBank.RegBank("Sberbank");
-                Client client = bank.RegClient(new RegForm("Daniil", "Arsentev", "123456", "+123232", "Hell"));
+                Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
+                client.FormBuilder.AddAdress("Hell");
+                client.FormBuilder.AddTelephone("+7541684");
 
                 bank.CreateDebitAc(client, 1000);
 
                 Assert.Catch<InvalidMoneyCountBanksException>(() => { bank.Withdraw(client.DebitAc, 10000); });
 
-                Client client2 = bank.RegClient(new RegForm("Artem", "Tutov", "122563"));
+                Client client2 = bank.RegClient(new RegFormBuilder("Artem", "Tutov", "122563"));
 
                 bank.CreateDebitAc(client2, 100000);
 
