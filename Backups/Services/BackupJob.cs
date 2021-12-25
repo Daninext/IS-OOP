@@ -9,27 +9,13 @@ namespace Backups.Services
         private List<JobObject> _objects = new List<JobObject>();
         private List<RestorePoint> _points = new List<RestorePoint>();
 
-        public string Mode { get; private set; } = "Split";
+        public IBackupMode Mode { get; private set; } = new SplitMode();
 
         public IReadOnlyList<RestorePoint> Points { get => _points; }
 
         public void CreateBackUp(IRepository repository)
         {
-            DateTime date = DateTime.Now;
-            if (Mode == "Split")
-            {
-                var names = new List<string>();
-                foreach (JobObject obj in _objects)
-                {
-                    names.Add(repository.CreateBackUp(obj, date.ToString()));
-                }
-
-                _points.Add(new RestorePoint(date, names));
-            }
-            else
-            {
-                _points.Add(new RestorePoint(date, repository.CreateBackUp(_objects, date.ToString())));
-            }
+            _points.Add(new RestorePoint(DateTime.Now, Mode.StartBackup(_objects, repository)));
         }
 
         public IReadOnlyList<RestorePoint> GetPoints()
@@ -62,14 +48,9 @@ namespace Backups.Services
             throw new JobObjectNotFoundBackUpException("There is not Job Object");
         }
 
-        public void ChangeModeToSplit()
+        public void ChangeMode(IBackupMode newMode)
         {
-            Mode = "Split";
-        }
-
-        public void ChangeModeToSingle()
-        {
-            Mode = "Single";
+            Mode = newMode;
         }
     }
 }

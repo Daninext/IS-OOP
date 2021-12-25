@@ -29,7 +29,7 @@ namespace Backups.Tests
                 _job.AddJob(new JobObject(Encoding.ASCII.GetBytes("98")));
             });
 
-            _job.ChangeModeToSingle();
+            _job.ChangeMode(new SingleMode());
 
             var rep = new VirtualRepository();
 
@@ -39,7 +39,7 @@ namespace Backups.Tests
             Assert.AreEqual(1, _job.GetPoints().Count);
 
             _job.RemoveJob(new JobObject(Encoding.ASCII.GetBytes("98")));
-            _job.ChangeModeToSplit();
+            _job.ChangeMode(new SplitMode());
             _job.CreateBackUp(rep);
 
             Assert.Catch<JobObjectNotFoundBackUpException>(() =>

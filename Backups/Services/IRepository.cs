@@ -4,7 +4,6 @@ namespace Backups.Services
 {
     public interface IRepository
     {
-        public IReadOnlyList<string> CreateBackUp(List<JobObject> objects, string mark);
-        public string CreateBackUp(JobObject jobject, string mark);
+        IReadOnlyList<string> CreateBackUp(IReadOnlyList<JobObject> objects, string mark);
     }
 }

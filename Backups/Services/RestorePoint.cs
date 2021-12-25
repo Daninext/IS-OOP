@@ -19,7 +19,7 @@ namespace Backups.Services
             _fileNames.Add(fileName);
         }
 
-        public DateTime CreatedDate { get; private set; }
-        public IReadOnlyList<string> FileNames { get => _fileNames; }
+        public DateTime CreatedDate { get; }
+        public IReadOnlyList<string> FileNames => _fileNames;
     }
 }

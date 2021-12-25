@@ -1,26 +1,55 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
+using Backups.Tools;
 
 namespace Backups.Services
 {
     public class VirtualRepository : IRepository
     {
-        private const string SPLITER = "#%#%#";
+        private const string SPLITER = "#%#%#"; // It is used for split different files in a single bytes array
         private Dictionary<string, byte[]> _virtualDirectory = new Dictionary<string, byte[]>();
         public IReadOnlyDictionary<string, byte[]> VirtualDirectory { get => _virtualDirectory; }
 
-        public IReadOnlyList<string> CreateBackUp(List<JobObject> objects, string mark)
+        public IReadOnlyList<string> CreateBackUp(IReadOnlyList<JobObject> objects, string mark)
+        {
+            if (objects.Count == 0)
+                throw new JobObjectNotFoundBackUpException("Job object not found");
+
+            byte[] byteData = ConvertDataToBytes(objects);
+            List<string> names = GetSavedFileNames(objects, mark);
+
+            if (objects.Count > 1)
+            {
+                SaveInDirectory(byteData, mark);
+            }
+            else
+            {
+                SaveInDirectory(byteData, names[0] + mark);
+            }
+
+            return names;
+        }
+
+        private byte[] ConvertDataToBytes(IReadOnlyList<JobObject> objects)
         {
             byte[] result = Encoding.ASCII.GetBytes(SPLITER);
 
-            var names = new List<string>();
-            int counter = 1;
             foreach (JobObject obj in objects)
             {
                 result = result.Concat(obj.Content).ToArray();
                 result = result.Concat(Encoding.ASCII.GetBytes(SPLITER)).ToArray();
+            }
+
+            return result;
+        }
+
+        private List<string> GetSavedFileNames(IReadOnlyList<JobObject> objects, string mark)
+        {
+            var names = new List<string>();
+            int counter = 1;
+            foreach (JobObject obj in objects)
+            {
                 if (obj.FileInf != null)
                 {
                     names.Add(obj.FileInf.FullName + mark);
@@ -32,66 +61,24 @@ namespace Backups.Services
                 }
             }
 
-            if (!_virtualDirectory.ContainsKey(mark + ".zip"))
-            {
-                _virtualDirectory.Add(mark + ".zip", result);
-            }
-            else
-            {
-                for (int i = 1; ; ++i)
-                {
-                    if (!_virtualDirectory.ContainsKey(i.ToString() + mark + ".zip"))
-                    {
-                        _virtualDirectory.Add(i.ToString() + mark + ".zip", result);
-                        break;
-                    }
-                }
-            }
-
             return names;
         }
 
-        public string CreateBackUp(JobObject jobject, string mark)
+        private void SaveInDirectory(byte[] data, string mark)
         {
-            if (jobject.FileInf != null)
+            if (!_virtualDirectory.ContainsKey(mark + ".zip"))
             {
-                if (!_virtualDirectory.ContainsKey(jobject.FileInf.Name + mark + ".zip"))
-                {
-                    _virtualDirectory.Add(jobject.FileInf.Name + mark + ".zip", File.ReadAllBytes(jobject.FileInf.FullName));
-                }
-                else
-                {
-                    for (int i = 1; ; ++i)
-                    {
-                        if (!_virtualDirectory.ContainsKey(jobject.FileInf.Name + i.ToString() + mark + ".zip"))
-                        {
-                            _virtualDirectory.Add(jobject.FileInf.Name + i.ToString() + mark + ".zip", File.ReadAllBytes(jobject.FileInf.FullName));
-                            break;
-                        }
-                    }
-                }
-
-                return jobject.FileInf.FullName + mark;
+                _virtualDirectory.Add(mark + ".zip", data);
+                return;
             }
-            else
-            {
-                if (!_virtualDirectory.ContainsKey("WithoutName" + mark + ".zip"))
-                {
-                    _virtualDirectory.Add("WithoutName" + mark + ".zip", jobject.Content);
-                }
-                else
-                {
-                    for (int i = 1; ; ++i)
-                    {
-                        if (!_virtualDirectory.ContainsKey("WithoutName" + i.ToString() + mark + ".zip"))
-                        {
-                            _virtualDirectory.Add("WithoutName" + i.ToString() + mark + ".zip", jobject.Content);
-                            break;
-                        }
-                    }
-                }
 
-                return "WithoutName" + mark;
+            for (int i = 1; ; ++i)
+            {
+                if (!_virtualDirectory.ContainsKey(i.ToString() + mark + ".zip"))
+                {
+                    _virtualDirectory.Add(i.ToString() + mark + ".zip", data);
+                    return;
+                }
             }
         }
     }

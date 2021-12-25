@@ -1,18 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using Backups.Tools;
 
 namespace Backups.Services
 {
     public class DiskRepository : IRepository
     {
-        private string _path = @"C:\backups\";
+        private string _path;
 
-        public IReadOnlyList<string> CreateBackUp(List<JobObject> objects, string mark)
+        public DiskRepository(string path)
+        {
+            _path = path;
+        }
+
+        public IReadOnlyList<string> CreateBackUp(IReadOnlyList<JobObject> objects, string mark)
         {
             if (objects.Count == 0)
-                throw new Exception("Invalid");
+                throw new JobObjectNotFoundBackUpException("Job object not found");
 
             ZipArchive zip = CreateEmptyArchive(_path + mark + ".zip");
 
