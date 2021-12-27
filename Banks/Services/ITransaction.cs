@@ -2,6 +2,6 @@
 {
     public interface ITransaction
     {
-        public void CancelTransaction(IAccount outAccount, IAccount toAccount, long money);
+        void CancelTransaction(AccountTransaction transaction);
     }
 }

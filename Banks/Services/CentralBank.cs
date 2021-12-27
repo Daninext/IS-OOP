@@ -13,11 +13,11 @@ namespace Banks.Services
 
         private event CapEvent Capital;
 
-        public Bank RegBank(string name)
+        public Bank RegBank(string name, DinPercentages depPercentages, float debPers = 1f, float credFee = 1f)
         {
             if (FindBank(name) == null)
             {
-                var bank = new Bank(this, name);
+                var bank = new Bank(this, name, depPercentages, debPers, credFee);
                 _banks.Add(bank);
                 Capital += bank.Capitalize;
                 return bank;
@@ -42,13 +42,13 @@ namespace Banks.Services
             Capital?.Invoke(target);
         }
 
-        public void TransactionMoney(IAccount outAc, IAccount toAc, long money)
+        public void TransactionMoney(IAccount outAc, IAccount toAc, float money)
         {
-            outAc.Transaction(money, toAc);
+            outAc.Transfer(money, toAc);
             MakeHistory(outAc, toAc, money, new TransferType());
         }
 
-        public void MakeHistory(IAccount outAc, IAccount toAc, long money, ITransaction transaction)
+        public void MakeHistory(IAccount outAc, IAccount toAc, float money, ITransaction transaction)
         {
             _transactions.Add(new AccountTransaction(transaction, outAc, toAc, money));
         }
@@ -59,7 +59,7 @@ namespace Banks.Services
             {
                 if (_transactions[i].OutAccount == account || _transactions[i].ToAccount == account)
                 {
-                    _transactions[i].Transaction.CancelTransaction(_transactions[i].OutAccount, _transactions[i].ToAccount, _transactions[i].Money);
+                    _transactions[i].Transaction.CancelTransaction(_transactions[i]);
 
                     _transactions.RemoveAt(i);
                     break;

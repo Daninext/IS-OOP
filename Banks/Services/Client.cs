@@ -1,94 +1,74 @@
 ﻿using System;
-using System.Globalization;
-using Banks.Tools;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
 
 namespace Banks.Services
 {
     public class Client
     {
+        private List<IAccount> _accounts = new List<IAccount>();
+
         public Client(RegFormBuilder form, Bank bank)
         {
             FormBuilder = form;
-            MBank = bank;
+            MainBank = bank;
         }
 
         public RegFormBuilder FormBuilder { get; private set; }
 
-        public Debit DebitAc { get; private set; } = null;
-        public Credit CreditAc { get; private set; } = null;
-        public Deposit DepositAc { get; private set; } = null;
+        public IReadOnlyList<IAccount> Accounts => _accounts;
 
-        public Bank MBank { get; }
-
-        public long TempDebitMoney { get; set; }
-        public long TempDepositMoney { get; set; }
-        public long TempCreditMoney { get; set; }
+        public Bank MainBank { get; }
 
         public void CreateDebitAc(float percentages, long startMoney = 0)
         {
-            if (DebitAc != null)
-                throw new AccountExistsBanksException("Client already has debit account");
-
-            DebitAc = new Debit(this, percentages, startMoney);
+            _accounts.Add(new Debit(this, percentages, startMoney));
         }
 
         public void CreateCreditAc(float fee, long startMoney = 0)
         {
-            if (CreditAc != null)
-                throw new AccountExistsBanksException("Client already has credit account");
-
-            CreditAc = new Credit(this, fee, startMoney);
+            _accounts.Add(new Credit(this, fee, startMoney));
         }
 
-        public void CreateDepositAc(DateTime endAcTime, DinPercentages percentages = null, long startMoney = 0)
+        public void CreateDepositAc(DateTime endAcTime, DinPercentages percentages, long startMoney = 0)
         {
-            if (DepositAc != null)
-                throw new AccountExistsBanksException("Client already has deposit account");
-
-            DepositAc = new Deposit(this, endAcTime, percentages, startMoney);
+            _accounts.Add(new Deposit(this, endAcTime, percentages, startMoney));
         }
 
         public void ChangeDebitPers(float newPers)
         {
-            if (DebitAc != null)
-                DebitAc.ChangePercentages(newPers);
+            foreach (Debit account in _accounts)
+            {
+                account.ChangePercentages(newPers);
+            }
 
-            // Notification about new pers
+            Notification("This is a percentages change notification", "We have changed percentages on your debit accounts. Now it is " + newPers.ToString());
         }
 
         public void ChangeCreditFee(float newFee)
         {
-            if (CreditAc != null)
-                CreditAc.ChangeFee(newFee);
+            foreach (Credit account in _accounts)
+            {
+                account.ChangeFee(newFee);
+            }
 
-            // Notification about new fee
+            Notification("This is a percentages change notification", "We have changed fee on your credit accounts. Now it is " + newFee.ToString());
         }
 
-        public long ExtraDebitMoney()
+        private void Notification(string subject, string body)
         {
-            if (DebitAc == null)
-                throw new AccountNotExistsBanksException("Client hasn`t debit account");
+            if (FormBuilder.Form.Email != null)
+            {
+                var message = new MailMessage(MainBank.BankEmail, FormBuilder.Form.Email);
 
-            return (long)(DebitAc.Money * (DebitAc.Percentages / (new GregorianCalendar().GetDaysInYear(DateTime.Now.Year) * 100)));
-        }
+                message.Subject = subject;
+                message.Body = body;
 
-        public long ExtraDepositMoney()
-        {
-            if (DepositAc == null)
-                throw new AccountNotExistsBanksException("Client hasn`t credit account");
-
-            return (long)(DepositAc.Money * (DepositAc.Percentages.GetPercent(DepositAc.Money) / (new GregorianCalendar().GetDaysInYear(DateTime.Now.Year) * 100)));
-        }
-
-        public long ExtraCreditMoney()
-        {
-            if (CreditAc == null)
-                throw new AccountNotExistsBanksException("Client hasn`t deposit account");
-
-            if (CreditAc.Money > 0)
-                return 0;
-
-            return (long)(CreditAc.Money * (CreditAc.Fee / (new GregorianCalendar().GetDaysInYear(DateTime.Now.Year) * 100)));
+                var client = new SmtpClient(MainBank.SMTP);
+                client.Credentials = CredentialCache.DefaultNetworkCredentials;
+                client.Send(message);
+            }
         }
     }
 }

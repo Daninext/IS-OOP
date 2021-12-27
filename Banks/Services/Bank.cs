@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using Banks.Tools;
 
 namespace Banks.Services
@@ -10,23 +11,21 @@ namespace Banks.Services
 
         private float _debitPercentages;
         private float _creditFee;
-        private DateTime _date = DateTime.Now;
+        private DateTime _date = new DateTime(2021, 1, 1);
         private DinPercentages _depositPercentages;
 
         private List<Client> _clients = new List<Client>();
 
-        public Bank(CentralBank cenBank, string name, float debPers = 1f, float crFee = 1f, DinPercentages depPercentages = null)
+        public Bank(CentralBank cenBank, string name, DinPercentages depPercentages, float debPers, float credFee)
         {
             _centralBank = cenBank;
 
             Name = name;
             _debitPercentages = debPers;
-            _creditFee = crFee;
+            _creditFee = credFee;
+            _depositPercentages = depPercentages;
 
-            if (depPercentages == null)
-                _depositPercentages = new DinPercentages();
-            else
-                _depositPercentages = depPercentages;
+            BankEmail = new MailAddress("ourbank@bank.com");
         }
 
         private delegate void DebitPersChanger(float newPers);
@@ -43,7 +42,7 @@ namespace Banks.Services
             private set
             {
                 if (value < 0)
-                    throw new Exception("Negative pers");
+                    throw new InvalidPercentagesBanksException("Negative pers");
 
                 _debitPercentages = value;
             }
@@ -55,7 +54,7 @@ namespace Banks.Services
             private set
             {
                 if (value < 0)
-                    throw new Exception("Negative fee");
+                    throw new InvalidPercentagesBanksException("Negative fee");
 
                 _creditFee = value;
             }
@@ -67,7 +66,7 @@ namespace Banks.Services
             private set
             {
                 if (value == null)
-                    throw new Exception("Deposit plan is null");
+                    throw new InvalidPercentagesBanksException("Deposit plan is null");
 
                 _depositPercentages = value;
             }
@@ -75,6 +74,25 @@ namespace Banks.Services
 
         public long WithdrawLimit { get; private set; } = 8000;
         public long TransferLimit { get; private set; } = 5000;
+
+        public MailAddress BankEmail { get; private set; }
+
+        public string SMTP { get; private set; }
+
+        public void ChangeBankEmail(string email)
+        {
+            MailAddress newEmail;
+            if (!MailAddress.TryCreate(email, out newEmail))
+                throw new InvalidRegDataBanksException("Invalid email");
+
+            BankEmail = newEmail;
+        }
+
+        public void ChangeSMTP(string newSMTP)
+        {
+            // Some checking for correctness
+            SMTP = newSMTP;
+        }
 
         public Client RegClient(RegFormBuilder form)
         {
@@ -132,42 +150,14 @@ namespace Banks.Services
             {
                 _date = _date.AddDays(1);
 
-                if (_date.Day == 1)
+                foreach (Client client in _clients)
                 {
-                    foreach (Client client in _clients)
+                    foreach (IAccount account in client.Accounts)
                     {
-                        if (client.DebitAc != null)
-                            client.TempDebitMoney += client.ExtraDebitMoney();
-                        if (client.CreditAc != null)
-                            client.TempCreditMoney += client.ExtraCreditMoney();
-                        if (client.DepositAc != null)
-                            client.TempDepositMoney += client.ExtraDepositMoney();
-                    }
-                }
-                else
-                {
-                    foreach (Client client in _clients)
-                    {
-                        if (client.DebitAc != null)
-                        {
-                            client.TempDebitMoney += client.ExtraDebitMoney();
-                            client.DebitAc.DepositMoney(client.TempDebitMoney);
-                            client.TempDebitMoney = 0;
-                        }
+                        account.CalculateExtraMoney();
 
-                        if (client.CreditAc != null)
-                        {
-                            client.TempCreditMoney += client.ExtraCreditMoney();
-                            client.CreditAc.DepositMoney(client.TempCreditMoney);
-                            client.TempCreditMoney = 0;
-                        }
-
-                        if (client.DepositAc != null)
-                        {
-                            client.TempDepositMoney += client.ExtraDepositMoney();
-                            client.DebitAc.DepositMoney(client.TempDepositMoney);
-                            client.TempDepositMoney = 0;
-                        }
+                        if (_date.Day == 1)
+                            account.Capitalize();
                     }
                 }
             }

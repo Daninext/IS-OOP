@@ -2,8 +2,12 @@
 {
     public interface IAccount
     {
-        public void DepositMoney(long money);
-        public void WithdrawMoney(long money);
-        public void Transaction(long money, IAccount account);
+        RealMoney Money { get; }
+        void DepositMoney(float money);
+        void WithdrawMoney(float money);
+        void Transfer(float money, IAccount account);
+        void Capitalize();
+        void CalculateExtraMoney();
+        float ShowMoney();
     }
 }

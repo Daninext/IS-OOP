@@ -18,5 +18,10 @@
         {
             Form.ChangeAddress(address);
         }
+
+        public void AddEmail(string email)
+        {
+            Form.ChangeEmail(email);
+        }
     }
 }

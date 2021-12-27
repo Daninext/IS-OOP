@@ -1,4 +1,5 @@
-﻿using Banks.Tools;
+﻿using System.Net.Mail;
+using Banks.Tools;
 
 namespace Banks.Services
 {
@@ -62,6 +63,7 @@ namespace Banks.Services
 
         public string Telephone { get; private set; } = string.Empty;
         public string Address { get; private set; } = string.Empty;
+        public MailAddress Email { get; private set; } = null;
 
         public void ChangeTelephone(string tel)
         {
@@ -80,6 +82,15 @@ namespace Banks.Services
         public void ChangeAddress(string address)
         {
             Address = address;
+        }
+
+        public void ChangeEmail(string email)
+        {
+            MailAddress newEmail;
+            if (!MailAddress.TryCreate(email, out newEmail))
+                throw new InvalidRegDataBanksException("Invalid email");
+
+            Email = newEmail;
         }
 
         public bool IsConfirmed()

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using System.Linq;
 using Banks.Tools;
 using Banks.Services;
 
@@ -26,7 +22,7 @@ namespace Banks.Tests
             {
                 _centralBank = new CentralBank();
 
-                Bank bank = _centralBank.RegBank("Sberbank");
+                Bank bank = _centralBank.RegBank("Sberbank", new DinPercentages());
                 Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
                 client.FormBuilder.AddAdress("Hell");
 
@@ -39,15 +35,15 @@ namespace Banks.Tests
             {
                 _centralBank = new CentralBank();
 
-                Bank bank = _centralBank.RegBank("Sberbank");
+                Bank bank = _centralBank.RegBank("Sberbank", new DinPercentages());
                 Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
 
                 bank.CreateDebitAc(client, 100000);
                 bank.ChangeDebitPers(3.65f);
 
-                _centralBank.CapTime(DateTime.Now.AddYears(1));
+                _centralBank.CapTime(new DateTime(2021, 1, 1).AddYears(1)); // Date changed for the test
 
-                Assert.AreEqual(103650, client.DebitAc.Money);
+                Assert.AreEqual(104426, client.Accounts[0].ShowMoney());
             }
 
             [Test]
@@ -55,7 +51,7 @@ namespace Banks.Tests
             {
                 _centralBank = new CentralBank();
 
-                Bank bank = _centralBank.RegBank("Sberbank");
+                Bank bank = _centralBank.RegBank("Sberbank", new DinPercentages());
                 Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
 
                 bank.CreateDebitAc(client, 100000);
@@ -64,11 +60,11 @@ namespace Banks.Tests
 
                 bank.CreateDebitAc(client2, 1000);
 
-                _centralBank.TransactionMoney(client.DebitAc, client2.DebitAc, 5000);
-                Assert.AreEqual(6000, client2.DebitAc.Money);
+                _centralBank.TransactionMoney(client.Accounts[0], client2.Accounts[0], 5000);
+                Assert.AreEqual(6000, client2.Accounts[0].ShowMoney());
 
-                _centralBank.CancelLastTransaction(client.DebitAc);
-                Assert.AreEqual(1000, client2.DebitAc.Money);
+                _centralBank.CancelLastTransaction(client.Accounts[0]);
+                Assert.AreEqual(1000, client2.Accounts[0].ShowMoney());
             }
 
             [Test]
@@ -76,20 +72,20 @@ namespace Banks.Tests
             {
                 _centralBank = new CentralBank();
 
-                Bank bank = _centralBank.RegBank("Sberbank");
+                Bank bank = _centralBank.RegBank("Sberbank", new DinPercentages());
                 Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
                 client.FormBuilder.AddAdress("Hell");
                 client.FormBuilder.AddTelephone("+7541684");
 
                 bank.CreateDebitAc(client, 1000);
 
-                Assert.Catch<InvalidMoneyCountBanksException>(() => { bank.Withdraw(client.DebitAc, 10000); });
+                Assert.Catch<InvalidMoneyCountBanksException>(() => { bank.Withdraw(client.Accounts[0], 10000); });
 
                 Client client2 = bank.RegClient(new RegFormBuilder("Artem", "Tutov", "122563"));
 
                 bank.CreateDebitAc(client2, 100000);
 
-                Assert.Catch<OutOfLimitBanksException>(() => { bank.Withdraw(client2.DebitAc, 10000); });
+                Assert.Catch<OutOfLimitBanksException>(() => { bank.Withdraw(client2.Accounts[0], 10000); });
             }
         }
     }

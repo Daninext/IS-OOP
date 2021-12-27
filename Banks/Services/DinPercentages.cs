@@ -5,37 +5,37 @@ namespace Banks.Services
 {
     public class DinPercentages
     {
-        private List<(long, float)> _dinPer = new List<(long, float)>();
+        private List<(float, float)> _dinPer = new List<(float, float)>();
 
-        public void AddPercent(int monValue, float percent)
+        public void AddPercent(float moneyValue, float percent)
         {
             for (int i = 0; i != _dinPer.Count; ++i)
             {
-                if (_dinPer[i].Item1 == monValue)
+                if (_dinPer[i].Item1 == moneyValue)
                 {
-                    _dinPer[i] = (monValue, percent);
+                    _dinPer[i] = (moneyValue, percent);
                     return;
                 }
             }
 
-            _dinPer.Add((monValue, percent));
+            _dinPer.Add((moneyValue, percent));
             _dinPer.Sort();
         }
 
-        public void DelPercent(int monValue)
+        public void DelPercent(float moneyValue)
         {
             for (int i = 0; i != _dinPer.Count; ++i)
             {
-                if (_dinPer[i].Item1 == monValue)
+                if (_dinPer[i].Item1 == moneyValue)
                     _dinPer.RemoveAt(i);
             }
         }
 
-        public float GetPercent(long monValue)
+        public float GetPercent(float moneyValue)
         {
-            foreach ((int, float) el in _dinPer)
+            foreach ((float, float) el in _dinPer)
             {
-                if (el.Item1 > monValue)
+                if (el.Item1 > moneyValue)
                     return el.Item2;
             }
 

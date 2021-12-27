@@ -4,11 +4,11 @@ namespace Banks.Services
 {
     public interface ICentralBank
     {
-        public Bank RegBank(string name);
-        public Bank FindBank(string name);
-        public void CapTime(DateTime target);
-        public void TransactionMoney(IAccount outAc, IAccount toAc, long money);
-        public void MakeHistory(IAccount outAc, IAccount toAc, long money, ITransaction transaction);
-        public void CancelLastTransaction(IAccount account);
+        Bank RegBank(string name, DinPercentages depPercentages, float debPers = 1f, float credFee = 1f);
+        Bank FindBank(string name);
+        void CapTime(DateTime target);
+        void TransactionMoney(IAccount outAc, IAccount toAc, float money);
+        void MakeHistory(IAccount outAc, IAccount toAc, float money, ITransaction transaction);
+        void CancelLastTransaction(IAccount account);
     }
 }

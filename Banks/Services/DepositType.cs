@@ -2,9 +2,9 @@
 {
     public class DepositType : ITransaction
     {
-        public void CancelTransaction(IAccount outAccount, IAccount toAccount, long money)
+        public void CancelTransaction(AccountTransaction transaction)
         {
-            outAccount.WithdrawMoney(money);
+            transaction.OutAccount.Money.AddMoney(-transaction.Money);
         }
     }
 }

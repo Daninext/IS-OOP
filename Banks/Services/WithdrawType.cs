@@ -2,9 +2,9 @@
 {
     public class WithdrawType : ITransaction
     {
-        public void CancelTransaction(IAccount outAccount, IAccount toAccount, long money)
+        public void CancelTransaction(AccountTransaction transaction)
         {
-            outAccount.DepositMoney(money);
+            transaction.OutAccount.Money.AddMoney(transaction.Money);
         }
     }
 }

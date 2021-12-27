@@ -2,7 +2,7 @@
 {
     public class AccountTransaction
     {
-        public AccountTransaction(ITransaction transaction, IAccount outAccount, IAccount toAccount, long money)
+        public AccountTransaction(ITransaction transaction, IAccount outAccount, IAccount toAccount, float money)
         {
             Transaction = transaction;
 
@@ -17,6 +17,6 @@
         public IAccount OutAccount { get; }
         public IAccount ToAccount { get; }
 
-        public long Money { get; }
+        public float Money { get; }
     }
 }
