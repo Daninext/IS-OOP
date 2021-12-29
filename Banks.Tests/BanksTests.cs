@@ -22,7 +22,7 @@ namespace Banks.Tests
             {
                 _centralBank = new CentralBank();
 
-                Bank bank = _centralBank.RegBank("Sberbank", new DinPercentages());
+                Bank bank = _centralBank.RegBank("Sberbank", new DynamicPercentages());
                 Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
                 client.FormBuilder.AddAdress("Hell");
 
@@ -35,7 +35,7 @@ namespace Banks.Tests
             {
                 _centralBank = new CentralBank();
 
-                Bank bank = _centralBank.RegBank("Sberbank", new DinPercentages());
+                Bank bank = _centralBank.RegBank("Sberbank", new DynamicPercentages());
                 Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
 
                 bank.CreateDebitAc(client, 100000);
@@ -51,7 +51,7 @@ namespace Banks.Tests
             {
                 _centralBank = new CentralBank();
 
-                Bank bank = _centralBank.RegBank("Sberbank", new DinPercentages());
+                Bank bank = _centralBank.RegBank("Sberbank", new DynamicPercentages());
                 Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
 
                 bank.CreateDebitAc(client, 100000);
@@ -72,7 +72,7 @@ namespace Banks.Tests
             {
                 _centralBank = new CentralBank();
 
-                Bank bank = _centralBank.RegBank("Sberbank", new DinPercentages());
+                Bank bank = _centralBank.RegBank("Sberbank", new DynamicPercentages());
                 Client client = bank.RegClient(new RegFormBuilder("Daniil", "Arsentev", "123456"));
                 client.FormBuilder.AddAdress("Hell");
                 client.FormBuilder.AddTelephone("+7541684");

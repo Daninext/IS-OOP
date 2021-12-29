@@ -11,21 +11,18 @@ namespace Banks.Services
         private RealMoney _money = new RealMoney(0);
         private RealMoney _moneyForPercentes = new RealMoney(0);
 
-        public Deposit(Client handler, DateTime endAcTime, DinPercentages percentages = null, long startMoney = 0)
+        public Deposit(Client handler, DateTime endAccountTime, DynamicPercentages percentages, long startMoney = 0)
         {
             _handler = handler;
             _money.AddMoney(startMoney);
-            _endDate = endAcTime;
+            _endDate = endAccountTime;
 
-            if (percentages == null)
-                Percentages = new DinPercentages();
-            else
-                Percentages = percentages;
+            Percentages = percentages;
         }
 
         public RealMoney Money => _money;
 
-        public DinPercentages Percentages { get; private set; }
+        public DynamicPercentages Percentages { get; private set; }
 
         public void DepositMoney(float money)
         {

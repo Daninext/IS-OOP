@@ -5,20 +5,20 @@ namespace Banks.Services
 {
     public class RegForm
     {
-        private string _fname;
-        private string _sname;
+        private string _firstName;
+        private string _secondName;
         private string _passportNum;
 
-        public RegForm(string fname, string sname, string passportNum)
+        public RegForm(string firstName, string secondName, string passportNum)
         {
-            FName = fname;
-            SName = sname;
+            FirstName = firstName;
+            SecondName = secondName;
             PassportNum = passportNum;
         }
 
-        public string FName
+        public string FirstName
         {
-            get => _fname;
+            get => _firstName;
             private set
             {
                 foreach (char c in value)
@@ -27,13 +27,13 @@ namespace Banks.Services
                         throw new InvalidRegDataBanksException("Invalid first name");
                 }
 
-                _fname = value;
+                _firstName = value;
             }
         }
 
-        public string SName
+        public string SecondName
         {
-            get => _sname;
+            get => _secondName;
             private set
             {
                 foreach (char c in value)
@@ -42,7 +42,7 @@ namespace Banks.Services
                         throw new InvalidRegDataBanksException("Invalid second name");
                 }
 
-                _sname = value;
+                _secondName = value;
             }
         }
 

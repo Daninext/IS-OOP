@@ -12,18 +12,18 @@ namespace Banks.Services
         private float _debitPercentages;
         private float _creditFee;
         private DateTime _date = new DateTime(2021, 1, 1);
-        private DinPercentages _depositPercentages;
+        private DynamicPercentages _depositPercentages;
 
         private List<Client> _clients = new List<Client>();
 
-        public Bank(CentralBank cenBank, string name, DinPercentages depPercentages, float debPers, float credFee)
+        public Bank(CentralBank centralBank, string name, DynamicPercentages depositPercentages, float debitPers, float creditFee)
         {
-            _centralBank = cenBank;
+            _centralBank = centralBank;
 
             Name = name;
-            _debitPercentages = debPers;
-            _creditFee = credFee;
-            _depositPercentages = depPercentages;
+            _debitPercentages = debitPers;
+            _creditFee = creditFee;
+            _depositPercentages = depositPercentages;
 
             BankEmail = new MailAddress("ourbank@bank.com");
         }
@@ -31,7 +31,7 @@ namespace Banks.Services
         private delegate void DebitPersChanger(float newPers);
         private delegate void CreditFeeChanger(float newFee);
 
-        private event DebitPersChanger DebChanger;
+        private event DebitPersChanger DebitChanger;
         private event CreditFeeChanger CreditChanger;
 
         public string Name { get; private set; }
@@ -42,7 +42,7 @@ namespace Banks.Services
             private set
             {
                 if (value < 0)
-                    throw new InvalidPercentagesBanksException("Negative pers");
+                    throw new InvalidPercentagesBanksException("Negative percentages");
 
                 _debitPercentages = value;
             }
@@ -60,7 +60,7 @@ namespace Banks.Services
             }
         }
 
-        public DinPercentages DepositPercentages
+        public DynamicPercentages DepositPercentages
         {
             get => _depositPercentages;
             private set
@@ -115,10 +115,10 @@ namespace Banks.Services
             return null;
         }
 
-        public void ChangeDebitPers(float newPers)
+        public void ChangeDebitPers(float newPercentages)
         {
-            _debitPercentages = newPers;
-            DebChanger?.Invoke(_debitPercentages);
+            _debitPercentages = newPercentages;
+            DebitChanger?.Invoke(_debitPercentages);
         }
 
         public void ChangeCreditFee(float newFee)
@@ -130,7 +130,7 @@ namespace Banks.Services
         public void CreateDebitAc(Client client, long startMoney = 0)
         {
             client.CreateDebitAc(_debitPercentages, startMoney);
-            DebChanger += client.ChangeDebitPers;
+            DebitChanger += client.ChangeDebitPers;
         }
 
         public void CreateCreditAc(Client client, long startMoney = 0)
@@ -139,9 +139,9 @@ namespace Banks.Services
             CreditChanger += client.ChangeCreditFee;
         }
 
-        public void CreateDepositAc(Client client, DateTime endAcTime, long startMoney = 0)
+        public void CreateDepositAc(Client client, DateTime endAccountTime, long startMoney = 0)
         {
-            client.CreateDepositAc(endAcTime, _depositPercentages, startMoney);
+            client.CreateDepositAc(endAccountTime, _depositPercentages, startMoney);
         }
 
         public void Capitalize(DateTime targetDate)

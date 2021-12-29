@@ -9,17 +9,17 @@ namespace Banks.Services
         private List<Bank> _banks = new List<Bank>();
         private List<AccountTransaction> _transactions = new List<AccountTransaction>();
 
-        private delegate void CapEvent(DateTime target);
+        private delegate void CapitalizeEvent(DateTime target);
 
-        private event CapEvent Capital;
+        private event CapitalizeEvent Capitalize;
 
-        public Bank RegBank(string name, DinPercentages depPercentages, float debPers = 1f, float credFee = 1f)
+        public Bank RegBank(string name, DynamicPercentages depositPercentages, float debitPers = 1f, float creditFee = 1f)
         {
             if (FindBank(name) == null)
             {
-                var bank = new Bank(this, name, depPercentages, debPers, credFee);
+                var bank = new Bank(this, name, depositPercentages, debitPers, creditFee);
                 _banks.Add(bank);
-                Capital += bank.Capitalize;
+                Capitalize += bank.Capitalize;
                 return bank;
             }
 
@@ -39,18 +39,18 @@ namespace Banks.Services
 
         public void CapTime(DateTime target)
         {
-            Capital?.Invoke(target);
+            Capitalize?.Invoke(target);
         }
 
-        public void TransactionMoney(IAccount outAc, IAccount toAc, float money)
+        public void TransactionMoney(IAccount outAccount, IAccount toAccount, float money)
         {
-            outAc.Transfer(money, toAc);
-            MakeHistory(outAc, toAc, money, new TransferType());
+            outAccount.Transfer(money, toAccount);
+            MakeHistory(outAccount, toAccount, money, new TransferType());
         }
 
-        public void MakeHistory(IAccount outAc, IAccount toAc, float money, ITransaction transaction)
+        public void MakeHistory(IAccount outAccount, IAccount toAccount, float money, ITransaction transaction)
         {
-            _transactions.Add(new AccountTransaction(transaction, outAc, toAc, money));
+            _transactions.Add(new AccountTransaction(transaction, outAccount, toAccount, money));
         }
 
         public void CancelLastTransaction(IAccount account)

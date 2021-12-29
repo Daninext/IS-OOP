@@ -2,9 +2,9 @@
 {
     public class RegFormBuilder
     {
-        public RegFormBuilder(string fname, string sname, string passportNum)
+        public RegFormBuilder(string firstName, string secondName, string passportNum)
         {
-            Form = new RegForm(fname, sname, passportNum);
+            Form = new RegForm(firstName, secondName, passportNum);
         }
 
         public RegForm Form { get; }
