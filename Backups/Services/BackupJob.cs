@@ -9,13 +9,15 @@ namespace Backups.Services
         private List<JobObject> _objects = new List<JobObject>();
         private List<RestorePoint> _points = new List<RestorePoint>();
 
-        public IBackupMode Mode { get; private set; } = new SplitMode();
+        public IBackupStrategy Strategy { get; private set; } = new SplitStrategy();
 
         public IReadOnlyList<RestorePoint> Points { get => _points; }
 
         public void CreateBackUp(IRepository repository)
         {
-            _points.Add(new RestorePoint(DateTime.Now, Mode.StartBackup(_objects, repository)));
+            var point = new RestorePoint(DateTime.Now, repository);
+            Strategy.StartBackup(_objects, point);
+            _points.Add(point);
         }
 
         public IReadOnlyList<RestorePoint> GetPoints()
@@ -48,9 +50,9 @@ namespace Backups.Services
             throw new JobObjectNotFoundBackUpException("There is not Job Object");
         }
 
-        public void ChangeMode(IBackupMode newMode)
+        public void ChangeMode(IBackupStrategy newMode)
         {
-            Mode = newMode;
+            Strategy = newMode;
         }
     }
 }

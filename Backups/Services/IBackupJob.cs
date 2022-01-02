@@ -8,6 +8,6 @@ namespace Backups.Services
         IReadOnlyList<RestorePoint> GetPoints();
         void AddJob(JobObject obj);
         void RemoveJob(JobObject obj);
-        void ChangeMode(IBackupMode newMode);
+        void ChangeMode(IBackupStrategy newMode);
     }
 }

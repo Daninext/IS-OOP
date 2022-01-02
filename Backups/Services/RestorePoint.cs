@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Backups.Services
 {
     public class RestorePoint
     {
-        private List<string> _fileNames = new List<string>();
-
-        public RestorePoint(DateTime date, IReadOnlyList<string> fileNames)
+        public RestorePoint(DateTime date, IRepository repository)
         {
             CreatedDate = date;
-            _fileNames.AddRange(fileNames);
-        }
-
-        public RestorePoint(DateTime date, string fileName)
-        {
-            CreatedDate = date;
-            _fileNames.Add(fileName);
+            Repository = repository;
         }
 
         public DateTime CreatedDate { get; }
-        public IReadOnlyList<string> FileNames => _fileNames;
+        public IRepository Repository { get; }
     }
 }

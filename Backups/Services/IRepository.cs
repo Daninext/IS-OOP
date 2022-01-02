@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace Backups.Services
+﻿namespace Backups.Services
 {
     public interface IRepository
     {
-        IReadOnlyList<string> CreateBackUp(IReadOnlyList<JobObject> objects, string mark);
+        IDataStorage Storage { get; }
+        public void Save(byte[] compressedBytes, string subname = "");
     }
 }

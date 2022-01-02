@@ -7,24 +7,22 @@ namespace Backups.Services
     {
         public JobObject(string path)
         {
-            FileInf = new FileInfo(path);
             Content = File.ReadAllBytes(path);
+            Name = new FileInfo(path).Name;
         }
 
-        public JobObject(byte[] content)
+        public JobObject(byte[] content, string name)
         {
             Content = content;
+            Name = name;
         }
-
-        public FileInfo FileInf { get; private set; }
 
         public byte[] Content { get; private set; }
 
+        public string Name { get; }
+
         public bool Equals(JobObject obj)
         {
-            if (FileInf != null && obj.FileInf != null)
-                return FileInf.FullName == obj.FileInf.FullName;
-
             return Content.OrderBy(a => a).SequenceEqual(obj.Content.OrderBy(a => a));
         }
     }
