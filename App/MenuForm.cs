@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Text.Json;
-using System.Threading.Tasks;
 using App.Services;
 using Converter.JsonTemplate;
 using Converter.SystemTemplate;
@@ -133,7 +132,7 @@ namespace App
 
         private void updateTaskButton_Click(object sender, EventArgs e)
         {
-            commandBox.Text = "update task comment=" + commentBox.Text.Replace(' ', '.').Replace(Environment.NewLine, "\\n");
+            commandBox.Text = "update task comment=" + commentBox.Text.Replace(" ", "^&").Replace(Environment.NewLine, "\\n");
         }
 
         private void setTaskButton_Click(object sender, EventArgs e)
@@ -174,9 +173,9 @@ namespace App
             }
 
             if (_report.name != null)
-                _report.name.Replace('.', ' ');
+                _report.name.Replace("^&", " ");
             if (_report.comment != null)
-                _report.comment.Replace('.', ' ');
+                _report.comment.Replace("^&", " ");
             _reportTable.LoadReport(_report);
             _reportTable.Show();
         }

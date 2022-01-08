@@ -1,4 +1,4 @@
-﻿namespace Server.Services
+﻿namespace Server.Services.Commands
 {
     public interface ICommand
     {

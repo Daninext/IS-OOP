@@ -88,7 +88,7 @@ namespace Converter.SystemTemplate
 
             if (staff == Staff)
             {
-                string processedMessage = message.Replace('.', ' ');
+                string processedMessage = message.Replace("^&", " ");
                 Comment += processedMessage + "\n";
                 WriteHistory("Staff with ID {0} added comment: {1} \n", staff.Id, processedMessage);
             }

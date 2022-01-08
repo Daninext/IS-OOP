@@ -43,9 +43,6 @@ namespace Server.Services.Commands
 
                 User boss = _database.Users.FirstOrDefault(u => u.Id == enterData.intId);
 
-                //if (!boss.StaffExists(staff))
-                //    throw new Exception("This staff doesn`t obey you");
-
                 staff.ChangeTask(boss, null);
 
                 foreach (User lowGradeStaff in staff.Staff)

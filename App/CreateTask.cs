@@ -14,7 +14,7 @@ namespace App
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            _returnCommand.Text = "create task target=" + targetBox.Text.Replace(' ', '.') + " needsecuritylevel=" + securityLevelBox.Text;
+            _returnCommand.Text = "create task target=" + targetBox.Text.Replace(" ", "^&") + " needsecuritylevel=" + securityLevelBox.Text;
         }
     }
 }

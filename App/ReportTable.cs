@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using App.Services;
 using Converter.JsonTemplate;
@@ -35,9 +28,9 @@ namespace App
         private void sendButton_Click(object sender, EventArgs e)
         {
             var newReport = new ReportTemplate();
-            newReport.name = nameBox.Text.Replace(' ', '.');
+            newReport.name = nameBox.Text.Replace(" ", "^&");
             newReport.type = typeLabel.Text;
-            newReport.comment = commentBox.Text.Replace(' ', '.').Replace(Environment.NewLine, "\\n");
+            newReport.comment = commentBox.Text.Replace(" ", "^&").Replace(Environment.NewLine, "\\n");
             newReport.boolResolve = resolveBox.Checked;
 
             _menu.SendReport(newReport);

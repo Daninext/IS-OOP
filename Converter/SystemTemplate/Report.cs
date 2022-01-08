@@ -20,7 +20,7 @@ namespace Converter.SystemTemplate
         {
             if (staff == Staff && !Resolved)
             {
-                string processedMessage = message.Replace('.', ' ');
+                string processedMessage = message.Replace("^&", " ");
                 Comment += processedMessage + "\n";
             }
         }
@@ -31,8 +31,8 @@ namespace Converter.SystemTemplate
                 + "\nCreated time: " + CreatedTime.ToString()
                 + "\nResolve: " + Resolved.ToString()
                 + "\nType: " + Type
-                + "\nName: " + Name.Replace('.', ' ')
-                + "\nComment: " + Comment.Replace('.', ' ');
+                + "\nName: " + Name.Replace("^&", " ")
+                + "\nComment: " + Comment.Replace("^&", " ");
 
             return answer;
         }

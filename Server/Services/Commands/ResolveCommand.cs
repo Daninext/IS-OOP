@@ -26,10 +26,6 @@ namespace Server.Services.Commands
                 case "task":
                     ResolveTask();
                     break;
-
-                case "report":
-                    ResolveReport();
-                    break;
             }
         }
 
@@ -61,11 +57,6 @@ namespace Server.Services.Commands
                 else
                     _client.SendAnswer("Resolve task - Failed : " + ex.Message);
             }
-        }
-
-        private void ResolveReport()
-        {
-
         }
     }
 }

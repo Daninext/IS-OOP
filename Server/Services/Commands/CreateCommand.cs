@@ -99,7 +99,7 @@ namespace Server.Services.Commands
 
                 if (task.target == null || task.target == string.Empty)
                     throw new Exception("Empty target field");
-                task.target = task.target.Replace('.', ' ');
+                task.target = task.target.Replace("^&", " ");
 
                 if (enterData != null)
                 {
