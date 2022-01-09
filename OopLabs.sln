@@ -34,6 +34,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banks", "Banks\Banks.csproj", "{F631B30C-A6DE-46B0-99B7-A75FBB6911F2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banks.Tests", "Banks.Tests\Banks.Tests.csproj", "{3845CD18-DD04-4B8F-B0DC-74EF9354F6DC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F631B30C-A6DE-46B0-99B7-A75FBB6911F2} = {F631B30C-A6DE-46B0-99B7-A75FBB6911F2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
