@@ -4,9 +4,9 @@ using Backups.Services;
 
 namespace BackupsExtra.Services
 {
-    public class DateLimit : IClearLimit
+    public class DateClearLimit : IClearLimit
     {
-        public DateLimit(DateTime limit)
+        public DateClearLimit(DateTime limit)
         {
             Limit = limit;
         }

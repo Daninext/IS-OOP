@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using NUnit.Framework;
 using Backups.Services;
-using Backups.Tools;
 using BackupsExtra.Services;
 
 namespace BackupsExtra.Tests
@@ -26,6 +21,8 @@ namespace BackupsExtra.Tests
         public void CheckVirtualRepWork()
         {
             _pointControl = new PointControl();
+            _pointControl.ChangeClearLimit(new CountClearLimit(1));
+            _pointControl.ChangeClearStrategy(new DeleteClearStrategy());
             _job = new BackupJob();
 
             var jobObj = new JobObject(Encoding.ASCII.GetBytes("98"), "98", "./");

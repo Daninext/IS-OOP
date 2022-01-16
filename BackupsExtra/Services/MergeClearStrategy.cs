@@ -3,7 +3,7 @@ using Backups.Services;
 
 namespace BackupsExtra.Services
 {
-    public class MergeStrategy : IClearStrategy
+    public class MergeClearStrategy : IClearStrategy
     {
         public void Clear(IReadOnlyList<RestorePoint> points, BackupJob job)
         {

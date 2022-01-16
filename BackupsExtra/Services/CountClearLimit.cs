@@ -4,9 +4,9 @@ using Backups.Services;
 
 namespace BackupsExtra.Services
 {
-    public class CountLimit : IClearLimit
+    public class CountClearLimit : IClearLimit
     {
-        public CountLimit(int limit)
+        public CountClearLimit(int limit)
         {
             Limit = limit;
         }

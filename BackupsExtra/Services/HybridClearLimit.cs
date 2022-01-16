@@ -3,12 +3,12 @@ using Backups.Services;
 
 namespace BackupsExtra.Services
 {
-    public class HybridLimit : IClearLimit
+    public class HybridClearLimit : IClearLimit
     {
         private List<IClearLimit> _limits = new List<IClearLimit>();
         private ILimitStrategy _strategy = new HybridAnyLimitStrategy();
 
-        public HybridLimit(IClearLimit limit, params IClearLimit[] limits)
+        public HybridClearLimit(IClearLimit limit, params IClearLimit[] limits)
         {
             _limits.Add(limit);
             _limits.AddRange(limits);

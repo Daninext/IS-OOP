@@ -4,12 +4,12 @@ namespace BackupsExtra.Services
 {
     public interface IPointControl
     {
-        public void RecoverData(RestorePoint point, string location = null);
-        public void ClearOldData();
-        public void AddBackupJob(BackupJob job);
-        public void RemoveBackupJob(BackupJob job);
-        public void ChangeClearStrategy(IClearStrategy newStrategy);
-        public void ChangeClearLimit(IClearLimit newLimit);
-        public void ChangeLoggingMethod(ILogging newLogger);
+        void RecoverData(RestorePoint point, string location = null);
+        void ClearOldData();
+        void AddBackupJob(BackupJob job);
+        void RemoveBackupJob(BackupJob job);
+        void ChangeClearStrategy(IClearStrategy newStrategy);
+        void ChangeClearLimit(IClearLimit newLimit);
+        void ChangeLoggingMethod(ILogging newLogger);
     }
 }

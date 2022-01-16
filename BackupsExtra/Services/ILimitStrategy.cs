@@ -5,6 +5,6 @@ namespace BackupsExtra.Services
 {
     public interface ILimitStrategy
     {
-        public IReadOnlyList<RestorePoint> Choose(IReadOnlyList<IClearLimit> limits, BackupJob job);
+        IReadOnlyList<RestorePoint> Choose(IReadOnlyList<IClearLimit> limits, BackupJob job);
     }
 }
