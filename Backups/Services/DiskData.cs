@@ -1,16 +1,26 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Backups.Services
 {
+    [DataContract]
     public class DiskData : IDataStorage
     {
-        private List<string> _zipPaths = new List<string>();
+        [DataMember]
+        private List<(DataInfo, string)> _zipPaths = new List<(DataInfo, string)>();
 
-        public IReadOnlyList<string> ZipPaths => _zipPaths;
+        public DiskData() { }
 
-        public void AddPath(string path)
+        public IReadOnlyList<(DataInfo, string)> ZipPaths => _zipPaths;
+
+        public void AddPath((DataInfo, string) data)
         {
-            _zipPaths.Add(path);
+            _zipPaths.Add(data);
+        }
+
+        public bool IsSingleStorage()
+        {
+            return _zipPaths.Count == 1;
         }
     }
 }

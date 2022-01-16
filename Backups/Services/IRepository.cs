@@ -3,6 +3,8 @@
     public interface IRepository
     {
         IDataStorage Storage { get; }
-        public void Save(byte[] compressedBytes, string subname = "");
+        void Save(byte[] compressedBytes, string path, string subname = "");
+        void Merge(IRepository repository);
+        void Recover(string newLocation);
     }
 }
