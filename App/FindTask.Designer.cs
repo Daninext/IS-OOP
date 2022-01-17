@@ -53,7 +53,7 @@ namespace App
             this.findButton.TabIndex = 19;
             this.findButton.Text = "Find task";
             this.findButton.UseVisualStyleBackColor = true;
-            this.findButton.Click += new System.EventHandler(this.findButton_Click);
+            this.findButton.Click += new System.EventHandler(this.FindButton_Click);
             // 
             // idBox
             // 

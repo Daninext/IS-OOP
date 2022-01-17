@@ -1,13 +1,13 @@
-﻿namespace Converter
+﻿namespace Transformer
 {
-    public class ConvertClass
+    public class TransformClass
     {
-        public string ConvertToJson(string message, int indexJsonWord)
+        public static string TransformToJson(string message, int indexJsonWord)
         {
             string[] systemInfo = message.Split('|')[0].Split(' ');
             string[] clientInfo = message.Split('|')[1].Split(' ');
 
-            string answer = "";
+            string answer = string.Empty;
             for (int i = 0; i != indexJsonWord; ++i)
             {
                 answer += systemInfo[i] + " ";

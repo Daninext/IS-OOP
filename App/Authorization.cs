@@ -24,7 +24,7 @@ namespace App
                 return;
             }
 
-            this.Invoke(new Action(() => 
+            Invoke(new Action(() =>
                 {
                     Hide();
                     var menu = new MenuForm(Convert.ToInt16(args[1]), passBox.Text);

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Converter.SystemTemplate
+namespace Transformer.SystemTempate
 {
     public class User
     {
+        public User() { }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
@@ -27,7 +29,9 @@ namespace Converter.SystemTemplate
                 StaffTask.ChangeStaff(this);
             }
             else
+            {
                 StaffTask = null;
+            }
         }
 
         public bool StaffExists(User staff)

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Text.Json;
+using System.Windows.Forms;
 using App.Services;
-using Converter.JsonTemplate;
-using Converter.SystemTemplate;
+using Transformer.JsonTemplate;
 
 namespace App
 {
@@ -23,9 +22,9 @@ namespace App
 
         private bool _waitForAnswer;
 
-        public MenuForm(short ID, string pass)
+        public MenuForm(short id, string pass)
         {
-            _myID = ID;
+            _myID = id;
             _pass = pass;
             _client = new AppClient(this);
             InitializeComponent();
@@ -45,11 +44,13 @@ namespace App
             string[] args = message.Split(' ');
 
             if (args[0] != "system")
+            {
                 Invoke(new Action(() =>
                 {
                     WriteHistory("s > " + message);
                 }));
-            
+            }
+
             switch (args[1])
             {
                 case "report":
@@ -61,12 +62,13 @@ namespace App
 
         public void SendReport(ReportTemplate report)
         {
-            _client.SendMessage("update report name=" + report.name
+            _client.SendMessage(
+                "update report name=" + report.name
                 + " staffid=" + _myID.ToString()
                 + " type=" + report.type
                 + " comment=" + report.comment
                 + " resolve=" + report.resolve
-                + "|id=" + _myID.ToString() 
+                + "|id=" + _myID.ToString()
                 + " password=" + _pass, 2);
         }
 
@@ -76,14 +78,14 @@ namespace App
             historyBox.AppendText(message + " Time: " + DateTime.Now.ToString() + Environment.NewLine + Environment.NewLine);
         }
 
-        private void logoutButton_Click(object sender, EventArgs e)
+        private void LogoutButton_Click(object sender, EventArgs e)
         {
             Close();
             var auth = new Authorization();
             auth.Show();
         }
 
-        private void sendCommandBottun_Click(object sender, EventArgs e)
+        private void SendCommandBottun_Click(object sender, EventArgs e)
         {
             string message = commandBox.Text;
             WriteHistory("c > " + message);
@@ -92,28 +94,28 @@ namespace App
             _client.SendMessage(message, 2);
         }
 
-        private void createStaffButton_Click(object sender, EventArgs e)
+        private void CreateStaffButton_Click(object sender, EventArgs e)
         {
             if (_createStaff.IsDisposed)
                 _createStaff = new CreateStaff(_myID, commandBox);
             _createStaff.Show();
         }
 
-        private void createTaskButton_Click(object sender, EventArgs e)
+        private void CreateTaskButton_Click(object sender, EventArgs e)
         {
             if (_createTask.IsDisposed)
                 _createTask = new CreateTask(commandBox);
             _createTask.Show();
         }
 
-        private void findStaffButton_Click(object sender, EventArgs e)
+        private void FindStaffButton_Click(object sender, EventArgs e)
         {
             if (_findStaff.IsDisposed)
                 _findStaff = new FindStaff(commandBox);
             _findStaff.Show();
         }
 
-        private void findTaskButton_Click(object sender, EventArgs e)
+        private void FindTaskButton_Click(object sender, EventArgs e)
         {
             if (_findTask.IsDisposed)
                 _findTask = new FindTask(commandBox);
@@ -130,19 +132,19 @@ namespace App
             _reportTable.Close();
         }
 
-        private void updateTaskButton_Click(object sender, EventArgs e)
+        private void UpdateTaskButton_Click(object sender, EventArgs e)
         {
             commandBox.Text = "update task comment=" + commentBox.Text.Replace(" ", "^&").Replace(Environment.NewLine, "\\n");
         }
 
-        private void setTaskButton_Click(object sender, EventArgs e)
+        private void SetTaskButton_Click(object sender, EventArgs e)
         {
             if (_setTask.IsDisposed)
                 _setTask = new SetTask(commandBox);
             _setTask.Show();
         }
 
-        private void resolveTaskButton_Click(object sender, EventArgs e)
+        private void ResolveTaskButton_Click(object sender, EventArgs e)
         {
             commandBox.Text = "resolve task";
         }
@@ -150,19 +152,21 @@ namespace App
         private async void GetReport(string type)
         {
             _waitForAnswer = true;
-            _client.SendMessage("find report write staffid=" + _myID.ToString()
-                + " type=" + type 
+            _client.SendMessage(
+                "find report write staffid=" + _myID.ToString()
+                + " type=" + type
                 + " resolve=false" + "|id=" + _myID.ToString()
                 + " password=" + _pass, 3);
 
-            await System.Threading.Tasks.Task.Run(() => { while (_waitForAnswer) ; });
+            await System.Threading.Tasks.Task.Run(() => { while (_waitForAnswer); });
 
             if (_reportTable.IsDisposed)
                 _reportTable = new ReportTable(_client, this);
 
             if (_report.intStaffid == 0)
             {
-                _client.SendMessage("create report staffid=" + _myID.ToString()
+                _client.SendMessage(
+                    "create report staffid=" + _myID.ToString()
                     + " type=daily"
                     + "|id=" + _myID.ToString()
                     + " password=" + _pass, 2);
@@ -180,28 +184,35 @@ namespace App
             _reportTable.Show();
         }
 
-        private void openReportButton_Click(object sender, EventArgs e)
+        private void OpenReportButton_Click(object sender, EventArgs e)
         {
             if (reportMode.CheckedItems.Count != 0)
                 GetReport(reportMode.CheckedItems[0].ToString());
         }
 
-        private void reportFromStaffButton_Click(object sender, EventArgs e)
+        private void ReportFromStaffButton_Click(object sender, EventArgs e)
         {
             if (reportMode.CheckedItems.Count != 0)
-                _client.SendMessage("find report read type=" + reportMode.CheckedItems[0].ToString()
+            {
+                _client.SendMessage(
+                    "find report read type=" + reportMode.CheckedItems[0].ToString()
                     + " resolve=true"
                     + "|id=" + _myID.ToString()
                     + " password=" + _pass, 3);
+            }
         }
 
-        private void reportMode_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void ReportMode_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             var list = sender as CheckedListBox;
             if (e.NewValue == CheckState.Checked)
+            {
                 foreach (int index in list.CheckedIndices)
+                {
                     if (index != e.Index)
                         list.SetItemChecked(index, false);
+                }
+            }
         }
     }
 }

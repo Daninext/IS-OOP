@@ -3,13 +3,11 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Converter;
-using Converter.JsonTemplate;
-using Converter.SystemTemplate;
+using Transformer;
 
 namespace App.Services
 {
-    public class AppClient
+    public class AppClient : IDisposable
     {
         private const string IP = "127.0.0.1";
         private const int PORT = 8888;
@@ -18,6 +16,8 @@ namespace App.Services
 
         private Authorization _authForm;
         private MenuForm _menuForm;
+
+        private bool _disposed = false;
 
         public AppClient(Authorization form)
         {
@@ -33,21 +33,40 @@ namespace App.Services
 
         ~AppClient()
         {
-            Disconnect();
+            Dispose(false);
         }
 
         public void SendMessage(string message, int startJsonIndex)
         {
             try
             {
-                string jsonMessage = new ConvertClass().ConvertToJson(message, startJsonIndex);
+                string jsonMessage = TransformClass.TransformToJson(message, startJsonIndex);
                 byte[] data = Encoding.Unicode.GetBytes(jsonMessage);
                 _stream.Write(data, 0, data.Length);
-            } 
+            }
             catch (Exception ex)
             {
                 MessageBox.Show("Connection lost \n" + ex.Message);
                 Exit();
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    Disconnect();
+                }
+
+                _disposed = true;
             }
         }
 

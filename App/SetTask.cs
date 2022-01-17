@@ -12,7 +12,7 @@ namespace App
             _returnCommand = commandBox;
         }
 
-        private void setButton_Click(object sender, EventArgs e)
+        private void SetButton_Click(object sender, EventArgs e)
         {
             _returnCommand.Text = "set task id=" + taskIdBox.Text + " staffid=" + staffIdBox.Text;
         }

@@ -82,7 +82,7 @@ namespace App
             this.logoutButton.TabIndex = 2;
             this.logoutButton.Text = "Logout";
             this.logoutButton.UseVisualStyleBackColor = true;
-            this.logoutButton.Click += new System.EventHandler(this.logoutButton_Click);
+            this.logoutButton.Click += new System.EventHandler(this.LogoutButton_Click);
             // 
             // panel1
             // 
@@ -135,7 +135,7 @@ namespace App
             this.sendCommandBottun.TabIndex = 5;
             this.sendCommandBottun.Text = "Send";
             this.sendCommandBottun.UseVisualStyleBackColor = true;
-            this.sendCommandBottun.Click += new System.EventHandler(this.sendCommandBottun_Click);
+            this.sendCommandBottun.Click += new System.EventHandler(this.SendCommandBottun_Click);
             // 
             // createStaffButton
             // 
@@ -145,7 +145,7 @@ namespace App
             this.createStaffButton.TabIndex = 6;
             this.createStaffButton.Text = "Add staff";
             this.createStaffButton.UseVisualStyleBackColor = true;
-            this.createStaffButton.Click += new System.EventHandler(this.createStaffButton_Click);
+            this.createStaffButton.Click += new System.EventHandler(this.CreateStaffButton_Click);
             // 
             // createTaskButton
             // 
@@ -155,7 +155,7 @@ namespace App
             this.createTaskButton.TabIndex = 7;
             this.createTaskButton.Text = "Add task";
             this.createTaskButton.UseVisualStyleBackColor = true;
-            this.createTaskButton.Click += new System.EventHandler(this.createTaskButton_Click);
+            this.createTaskButton.Click += new System.EventHandler(this.CreateTaskButton_Click);
             // 
             // findStaffButton
             // 
@@ -165,7 +165,7 @@ namespace App
             this.findStaffButton.TabIndex = 8;
             this.findStaffButton.Text = "Find staff";
             this.findStaffButton.UseVisualStyleBackColor = true;
-            this.findStaffButton.Click += new System.EventHandler(this.findStaffButton_Click);
+            this.findStaffButton.Click += new System.EventHandler(this.FindStaffButton_Click);
             // 
             // findTaskButton
             // 
@@ -175,7 +175,7 @@ namespace App
             this.findTaskButton.TabIndex = 9;
             this.findTaskButton.Text = "Find task";
             this.findTaskButton.UseVisualStyleBackColor = true;
-            this.findTaskButton.Click += new System.EventHandler(this.findTaskButton_Click);
+            this.findTaskButton.Click += new System.EventHandler(this.FindTaskButton_Click);
             // 
             // commentBox
             // 
@@ -205,7 +205,7 @@ namespace App
             this.updateTaskButton.TabIndex = 12;
             this.updateTaskButton.Text = "Update task";
             this.updateTaskButton.UseVisualStyleBackColor = true;
-            this.updateTaskButton.Click += new System.EventHandler(this.updateTaskButton_Click);
+            this.updateTaskButton.Click += new System.EventHandler(this.UpdateTaskButton_Click);
             // 
             // setTaskButton
             // 
@@ -215,7 +215,7 @@ namespace App
             this.setTaskButton.TabIndex = 13;
             this.setTaskButton.Text = "Set task";
             this.setTaskButton.UseVisualStyleBackColor = true;
-            this.setTaskButton.Click += new System.EventHandler(this.setTaskButton_Click);
+            this.setTaskButton.Click += new System.EventHandler(this.SetTaskButton_Click);
             // 
             // resolveTaskButton
             // 
@@ -225,7 +225,7 @@ namespace App
             this.resolveTaskButton.TabIndex = 14;
             this.resolveTaskButton.Text = "Resolve task";
             this.resolveTaskButton.UseVisualStyleBackColor = true;
-            this.resolveTaskButton.Click += new System.EventHandler(this.resolveTaskButton_Click);
+            this.resolveTaskButton.Click += new System.EventHandler(this.ResolveTaskButton_Click);
             // 
             // openReportButton
             // 
@@ -235,7 +235,7 @@ namespace App
             this.openReportButton.TabIndex = 15;
             this.openReportButton.Text = "Open";
             this.openReportButton.UseVisualStyleBackColor = true;
-            this.openReportButton.Click += new System.EventHandler(this.openReportButton_Click);
+            this.openReportButton.Click += new System.EventHandler(this.OpenReportButton_Click);
             // 
             // staffLabel
             // 
@@ -275,7 +275,7 @@ namespace App
             this.reportFromStaffButton.TabIndex = 21;
             this.reportFromStaffButton.Text = "Get";
             this.reportFromStaffButton.UseVisualStyleBackColor = true;
-            this.reportFromStaffButton.Click += new System.EventHandler(this.reportFromStaffButton_Click);
+            this.reportFromStaffButton.Click += new System.EventHandler(this.ReportFromStaffButton_Click);
             // 
             // reportMode
             // 
@@ -289,7 +289,7 @@ namespace App
             this.reportMode.Name = "reportMode";
             this.reportMode.Size = new System.Drawing.Size(84, 72);
             this.reportMode.TabIndex = 3;
-            this.reportMode.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.reportMode_ItemCheck);
+            this.reportMode.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ReportMode_ItemCheck);
             // 
             // MenuForm
             // 

@@ -2,13 +2,11 @@
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Text.Json;
-using Server.Services;
+using System.Threading;
 using Server.Services.Commands;
-using Converter;
-using Converter.JsonTemplate;
-using Converter.SystemTemplate;
+using Transformer;
+using Transformer.JsonTemplate;
 
 namespace Server
 {
@@ -19,6 +17,8 @@ namespace Server
 
         private TcpListener _listener;
         private StaffContext _database;
+
+        private bool _disposed = false;
 
         public void StartServer()
         {
@@ -42,7 +42,7 @@ namespace Server
                     var clientThread = new Thread(new ThreadStart(client.GetCommand));
                     clientThread.Start();
                 }
-            } 
+            }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -58,11 +58,33 @@ namespace Server
             ProcessJsonCommand(client, command);
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _database.Dispose();
+
+                    if (_listener != null)
+                        _listener.Stop();
+                }
+
+                _disposed = true;
+            }
+        }
+
         private void ReadCommand()
         {
             while (true)
             {
-                string command = new ConvertClass().ConvertToJson(Console.ReadLine() + "|", 2);
+                string command = TransformClass.TransformToJson(Console.ReadLine() + "|", 2);
 
                 ProcessJsonCommand(null, command);
             }
@@ -136,14 +158,6 @@ namespace Server
                 else
                     client.SendAnswer(ex.Message);
             }
-        }
-
-        public void Dispose()
-        {
-            _database.Dispose();
-
-            if (_listener != null)
-                _listener.Stop();
         }
     }
 }

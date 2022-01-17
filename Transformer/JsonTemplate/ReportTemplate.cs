@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Converter.SystemTemplate;
+using Transformer.SystemTempate;
 
-namespace Converter.JsonTemplate
+namespace Transformer.JsonTemplate
 {
     public class ReportTemplate
     {
-        public ReportTemplate()
-        {
-
-        }
+        public ReportTemplate() { }
 
         public ReportTemplate(Report report)
         {

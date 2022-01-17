@@ -45,7 +45,7 @@ namespace App
             this.setButton.TabIndex = 19;
             this.setButton.Text = "Set task";
             this.setButton.UseVisualStyleBackColor = true;
-            this.setButton.Click += new System.EventHandler(this.setButton_Click);
+            this.setButton.Click += new System.EventHandler(this.SetButton_Click);
             // 
             // taskIdBox
             // 

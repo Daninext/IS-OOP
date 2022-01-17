@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Text.Json;
-using Converter.JsonTemplate;
-using Converter.SystemTemplate;
+using Transformer.JsonTemplate;
+using Transformer.SystemTempate;
 
 namespace Server.Services.Commands
 {
@@ -10,6 +10,7 @@ namespace Server.Services.Commands
     {
         private StaffContext _database;
         private Client _client;
+        private UserTemplate _enterData;
         private string[] _args;
 
         public ResolveCommand(StaffContext database, Client client, params string[] args)
@@ -17,6 +18,9 @@ namespace Server.Services.Commands
             _database = database;
             _client = client;
             _args = args;
+
+            if (_client != null)
+                _enterData = JsonSerializer.Deserialize<UserTemplate>(_args[_args.Length - 1]);
         }
 
         public void Execute()
@@ -31,32 +35,18 @@ namespace Server.Services.Commands
 
         private void ResolveTask()
         {
-            try
-            {
-                UserTemplate enterData = null;
-                if (_client != null)
-                    enterData = JsonSerializer.Deserialize<UserTemplate>(_args[_args.Length - 1]);
+            User staff = _database.Users.FirstOrDefault(u => u.Id == _enterData.intId);
 
-                User staff = _database.Users.FirstOrDefault(u => u.Id == enterData.intId);
+            if (staff.StaffTask == null)
+                throw new Exception("You haven`t any task");
 
-                if (staff.StaffTask == null)
-                    throw new Exception("You haven`t any task");
+            staff.StaffTask.ChangeState(Task.StateType.Resolved);
+            staff.ChangeTask(staff, null);
 
-                staff.StaffTask.ChangeState(Task.StateType.Resolved);
-                staff.ChangeTask(staff, null);
-
-                if (_client == null)
-                    Console.WriteLine("Resolve task - Completed");
-                else
-                    _client.SendAnswer("Resolve task - Completed\n");
-            }
-            catch (Exception ex)
-            {
-                if (_client == null)
-                    Console.WriteLine("Resolve task - Failed : " + ex.Message);
-                else
-                    _client.SendAnswer("Resolve task - Failed : " + ex.Message);
-            }
+            if (_client == null)
+                Console.WriteLine("Resolve task - Completed");
+            else
+                _client.SendAnswer("Resolve task - Completed\n");
         }
     }
 }

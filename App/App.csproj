@@ -1,191 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E2FDEFFC-098D-4BBA-A8B1-30EBFE27FD5C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>App</RootNamespace>
-    <AssemblyName>App</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Text.Encodings.Web, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encodings.Web.6.0.0\lib\net461\System.Text.Encodings.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Text.Json, Version=6.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Json.6.0.1\lib\net461\System.Text.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Authorization.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Authorization.Designer.cs">
-      <DependentUpon>Authorization.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CreateStaff.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CreateStaff.Designer.cs">
-      <DependentUpon>CreateStaff.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CreateTask.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CreateTask.Designer.cs">
-      <DependentUpon>CreateTask.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FindStaff.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FindStaff.Designer.cs">
-      <DependentUpon>FindStaff.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FindTask.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FindTask.Designer.cs">
-      <DependentUpon>FindTask.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MenuForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MenuForm.Designer.cs">
-      <DependentUpon>MenuForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportTable.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ReportTable.Designer.cs">
-      <DependentUpon>ReportTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Services\AppClient.cs" />
-    <Compile Include="SetTask.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SetTask.Designer.cs">
-      <DependentUpon>SetTask.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Authorization.resx">
-      <DependentUpon>Authorization.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CreateStaff.resx">
-      <DependentUpon>CreateStaff.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CreateTask.resx">
-      <DependentUpon>CreateTask.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FindStaff.resx">
-      <DependentUpon>FindStaff.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FindTask.resx">
-      <DependentUpon>FindTask.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MenuForm.resx">
-      <DependentUpon>MenuForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <EmbeddedResource Include="ReportTable.resx">
-      <DependentUpon>ReportTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SetTask.resx">
-      <DependentUpon>SetTask.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
+    <ProjectReference Include="..\Transformer\Transformer.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Converter\Converter.csproj">
-      <Project>{8bdac62c-5210-4f60-bc51-17ddfc258e9c}</Project>
-      <Name>Converter</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets" Condition="Exists('..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Text.Json.6.0.1\build\System.Text.Json.targets'))" />
-  </Target>
+
 </Project>

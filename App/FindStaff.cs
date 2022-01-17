@@ -12,7 +12,7 @@ namespace App
             _returnCommand = commandBox;
         }
 
-        private void findButton_Click(object sender, EventArgs e)
+        private void FindButton_Click(object sender, EventArgs e)
         {
             _returnCommand.Text = "find staff id=" + idBox.Text;
         }

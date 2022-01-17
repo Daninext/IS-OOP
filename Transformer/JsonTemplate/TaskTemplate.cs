@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Converter.JsonTemplate
+namespace Transformer.JsonTemplate
 {
     public class TaskTemplate
     {

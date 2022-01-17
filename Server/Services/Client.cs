@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Net.Sockets;
+using System.Text;
 
 namespace Server
 {
@@ -52,6 +52,7 @@ namespace Server
         public void SendAnswer(string message)
         {
             if (_stream.CanWrite)
+            {
                 try
                 {
                     byte[] data = Encoding.Unicode.GetBytes(message);
@@ -61,6 +62,7 @@ namespace Server
                 {
                     Console.WriteLine(ex.Message);
                 }
+            }
         }
     }
 }

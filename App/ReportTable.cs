@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using App.Services;
-using Converter.JsonTemplate;
-using Converter.SystemTemplate;
+using Transformer.JsonTemplate;
 
 namespace App
 {
@@ -25,7 +24,7 @@ namespace App
             commentBox.Text = report.comment;
         }
 
-        private void sendButton_Click(object sender, EventArgs e)
+        private void SendButton_Click(object sender, EventArgs e)
         {
             var newReport = new ReportTemplate();
             newReport.name = nameBox.Text.Replace(" ", "^&");

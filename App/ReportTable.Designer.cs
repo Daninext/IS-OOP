@@ -114,7 +114,7 @@ namespace App
             this.sendButton.TabIndex = 7;
             this.sendButton.Text = "Send";
             this.sendButton.UseVisualStyleBackColor = true;
-            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
+            this.sendButton.Click += new System.EventHandler(this.SendButton_Click);
             // 
             // ReportTable
             // 

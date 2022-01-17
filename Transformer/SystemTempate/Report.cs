@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Converter.SystemTemplate
+namespace Transformer.SystemTempate
 {
     public class Report
     {
@@ -8,6 +8,7 @@ namespace Converter.SystemTemplate
         {
             CreatedTime = DateTime.Now;
         }
+
         public int Id { get; set; }
         public User Staff { get; set; }
         public bool Resolved { get; set; }

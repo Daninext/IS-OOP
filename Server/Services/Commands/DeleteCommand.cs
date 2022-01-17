@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Text.Json;
-using Converter.JsonTemplate;
-using Converter.SystemTemplate;
+using Transformer.JsonTemplate;
+using Transformer.SystemTempate;
 
 namespace Server.Services.Commands
 {
@@ -21,45 +21,38 @@ namespace Server.Services.Commands
 
         public void Execute()
         {
-            switch(_args[1])
+            switch (_args[1])
             {
                 case "staff":
                     DeleteStaff();
-                break;
+                    break;
             }
         }
 
         private void DeleteStaff()
         {
-            try
+            UserTemplate enterData = JsonSerializer.Deserialize<UserTemplate>(_args[_args.Length - 1]);
+            UserTemplate tempStaff = JsonSerializer.Deserialize<UserTemplate>(_args[2]);
+
+            User staff = _database.Users.FirstOrDefault(u => u.Id == tempStaff.intId);
+
+            if (staff == null)
+                throw new Exception("There are no staff with such ID");
+
+            User boss = _database.Users.FirstOrDefault(u => u.Id == enterData.intId);
+
+            staff.ChangeTask(boss, null);
+
+            foreach (User lowGradeStaff in staff.Staff)
             {
-                UserTemplate enterData = JsonSerializer.Deserialize<UserTemplate>(_args[_args.Length - 1]);
-                UserTemplate tempStaff = JsonSerializer.Deserialize<UserTemplate>(_args[2]);
-
-                User staff = _database.Users.FirstOrDefault(u => u.Id == tempStaff.intId);
-
-                if (staff == null)
-                    throw new Exception("There are no staff with such ID");
-
-                User boss = _database.Users.FirstOrDefault(u => u.Id == enterData.intId);
-
-                staff.ChangeTask(boss, null);
-
-                foreach (User lowGradeStaff in staff.Staff)
-                {
-                    lowGradeStaff.Boss = boss;
-                }
-
-                _database.SaveChanges();
-                _database.Users.Remove(staff);
-                _database.SaveChanges();
-
-                Console.WriteLine("Staff with ID {0} deleted", tempStaff.id);
+                lowGradeStaff.Boss = boss;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+
+            _database.SaveChanges();
+            _database.Users.Remove(staff);
+            _database.SaveChanges();
+
+            Console.WriteLine("Staff with ID {0} deleted", tempStaff.id);
         }
     }
 }

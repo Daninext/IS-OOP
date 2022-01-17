@@ -45,7 +45,7 @@ namespace App
             this.addButton.TabIndex = 15;
             this.addButton.Text = "Add task";
             this.addButton.UseVisualStyleBackColor = true;
-            this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
             // targetBox
             // 

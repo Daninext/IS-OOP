@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Converter.SystemTemplate
+namespace Transformer.SystemTempate
 {
     public class Task
     {
-        public enum StateType
-        {
-            Open,
-            Active,
-            Resolved
-        }
-
-        public Task()
-        {
-        }
+        public Task() { }
 
         public Task(string target)
         {
@@ -25,6 +16,27 @@ namespace Converter.SystemTemplate
             LastChangeTime = DateTime.Now.ToShortDateString();
 
             WriteHistory("Task created {0} \n", DateTime.Now.ToShortDateString());
+        }
+
+        /// <summary>
+        /// Types of states.
+        /// </summary>
+        public enum StateType
+        {
+            /// <summary>
+            /// Represents an open state.
+            /// </summary>
+            Open,
+
+            /// <summary>
+            /// Represents an active state.
+            /// </summary>
+            Active,
+
+            /// <summary>
+            /// Represents a resolved state.
+            /// </summary>
+            Resolved,
         }
 
         public int Id { get; set; }
@@ -67,7 +79,7 @@ namespace Converter.SystemTemplate
             {
                 Staff = newStaff;
                 WriteHistory("Current stuff changed: null to {0} - {1}\n", newStaff.Id, newStaff.Name);
-            } 
+            }
             else
             {
                 LastStaff.Add(Staff);
@@ -94,16 +106,6 @@ namespace Converter.SystemTemplate
             }
         }
 
-        private void WriteHistory(string format, params object[] args)
-        {
-            string message = format;
-
-            for (int i = 0; i != args.Length; ++i)
-                message = message.Replace("{" + i.ToString() + "}", args[i].ToString());
-
-            History += message;
-        }
-
         public bool StaffWorkedWithThisTask(User staff)
         {
             if (Staff == staff || LastStaff.FirstOrDefault(s => s == staff) != null)
@@ -125,6 +127,16 @@ namespace Converter.SystemTemplate
                 str += "Current staff ID: " + Staff.Id.ToString() + "\n";
 
             return str;
+        }
+
+        private void WriteHistory(string format, params object[] args)
+        {
+            string message = format;
+
+            for (int i = 0; i != args.Length; ++i)
+                message = message.Replace("{" + i.ToString() + "}", args[i].ToString());
+
+            History += message;
         }
     }
 }
