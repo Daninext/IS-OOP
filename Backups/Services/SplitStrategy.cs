@@ -21,7 +21,7 @@ namespace Backups.Services
                 archive.Dispose();
                 byte[] compressedBytes = outStream.ToArray();
 
-                point.Repository.Save(compressedBytes, obj.Name);
+                point.Repository.Save(compressedBytes, obj.Path, obj.Name);
             }
         }
     }
